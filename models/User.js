@@ -13,15 +13,21 @@ const userSchema = new Schema({
     type: String,
     required: true
   },
-  fullName: {
+  fname: {
+    type: String,
+    required: true
+  },
+  lname: {
     type: String,
     required: true
   },
   bio: {
-    type: String
+    type: String,
+    default: 'No bio available'
   },
   avatar: {
-    type: String
+    type: String,
+    default: 'default_avatar.png'
   },
   friends: [{
     userId: {
