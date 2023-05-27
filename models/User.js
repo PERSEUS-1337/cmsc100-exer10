@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const collectionName = 'userData';
+const postCollectionName = 'postData'
 
 const userSchema = new Schema({
   email: {
@@ -29,6 +30,10 @@ const userSchema = new Schema({
     type: String,
     default: 'default_avatar.png'
   },
+  posts: [{
+    type: Schema.Types.ObjectId,
+    ref: postCollectionName
+  }],
   friends: [{
     userId: {
       type: Schema.Types.ObjectId,
