@@ -5,7 +5,7 @@ const collectionName = 'postData';
 const userCollectionName = 'userData'
 
 const postSchema = new Schema({
-  user: {
+  author: {
     type: Schema.Types.ObjectId,
     ref: userCollectionName,
     required: true
@@ -19,7 +19,7 @@ const postSchema = new Schema({
     ref: userCollectionName
   }],
   comments: [{
-    user: {
+    author: {
       type: Schema.Types.ObjectId,
       ref: userCollectionName,
       required: true
@@ -34,6 +34,10 @@ const postSchema = new Schema({
     }
   }],
   createdAt: {
+    type: Date,
+    default: Date.now
+  },
+  lastEdited: {
     type: Date,
     default: Date.now
   },

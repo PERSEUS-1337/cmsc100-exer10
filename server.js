@@ -9,6 +9,8 @@ const port = process.env.PORT || 5000;
 
 // Import Routes
 const authRouter = require('./routes/authRouter');
+const userRouter = require('./routes/userRouter');
+const postRouter = require('./routes/postRouter');
 
 // Express Application
 const app = express();
@@ -35,6 +37,8 @@ app.get('/api', (req, res) => {
 });
 
 app.use('/api/auth', authRouter);
+app.use('/api/user', userRouter);
+app.use('/api/post', postRouter);
 
 app.use((req, res, next) => {
   res.status(404).json({ error: 'Route not found' });

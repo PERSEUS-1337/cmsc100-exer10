@@ -35,14 +35,17 @@ const userSchema = new Schema({
     ref: postCollectionName
   }],
   friends: [{
-    userId: {
+    type: Schema.Types.ObjectId,
+    ref: collectionName
+  }],
+  friend_request: [{
+    _id: {
       type: Schema.Types.ObjectId,
       ref: collectionName
     },
     status: {
       type: String,
-      enum: ['pending', 'accepted', 'rejected'],
-      default: 'pending'
+      enum: ['received', 'sent'],
     }
   }],
   createdAt: {
