@@ -6,6 +6,7 @@ const Post = require('../models/Post');
 const validator = require('validator');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+
 const createToken = (_id) => {
     return jwt.sign({_id}, process.env.PRIVATE_KEY, {expiresIn: '1d' });
 }
@@ -28,13 +29,13 @@ async function createUser(req, res) {
         if (!fname || !lname || !email || !password)
             throw {code: 400, msg: api.REQUIRED_ALL_FIELDS};
             
-        // // Password encryption before storing in DB
+        // Password encryption before storing in DB
         const salt = await bcrypt.genSalt(10);
         const hash = await bcrypt.hash(password, salt);
     
         const newUser = new User({
             email,
-            // password: hash,
+            password: hash,
             password,
             fname,
             lname,
@@ -42,9 +43,12 @@ async function createUser(req, res) {
 
         const savedUser = await newUser.save();
 
+        // Log in the user immediately after account creation
+        const token = createToken(savedUser._id);
+
         console.info(api.SUCCESS_USER_CREATED);
-        return res.status(201).json({msg: api.SUCCESS_USER_CREATED, user: savedUser});
-        // res.redirect(307, '/api/v1/auth/login/user');
+        res.status(201).json({msg: api.SUCCESS_USER_CREATED, uId: savedUser._id, token: token });
+        res.redirect(307)
     } catch (err) {
         console.error(api.ERROR_CREATING_USER, err.msg || err);
         return res.status(err.code || 500).json({err: err.msg || api.SERVER_ERROR})
@@ -56,7 +60,7 @@ async function loginUser(req, res){
     try {
         
         if (!validator.default.isEmail(email))
-        throw {code: 400, msg: api.INVALID_EMAIL};
+            throw {code: 400, msg: api.INVALID_EMAIL};
         
         const user = await User.findOne({ email });
 
@@ -64,11 +68,15 @@ async function loginUser(req, res){
             throw {code: 404, msg: api.NOT_FOUND_USER};
 
         // Check if the password matches
-        // const matchPass = bcrypt.compare(password, user.password);
+        const matchPass = bcrypt.compare(password, user.password);
+
+        if (!matchPass) {
+            throw Error('Incorrect password');
+        }
         // const matchPass = await user.comparePassword(password);
 
-        if (! (password === user.password))
-            throw {code: 400, msg: api.WRONG_PASSWORD};
+        // if (! (password === user.password))
+        //     throw {code: 400, msg: api.WRONG_PASSWORD};
 
         const token = createToken(user._id); 
 
@@ -90,7 +98,7 @@ async function deleteUser (req, res) {
         const user = await User.findById(uId);
 
         if (!user)
-            throw {code: 400, msg: api.NOT_FOUND_USER};
+            throw {code: 404, msg: api.NOT_FOUND_USER};
 
         await Post.deleteMany({ user: uId });
 

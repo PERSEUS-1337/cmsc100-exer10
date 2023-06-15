@@ -2,15 +2,9 @@ const mongoose = require('mongoose');
 const api = require('../middleware/apiMessages');
 
 const User = require('../models/User');
-const Post = require('../models/Post');
 
 // Validation and Authentication
 const validator = require('validator');
-const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken');
-const createToken = (_id) => {
-    return jwt.sign({_id}, process.env.PRIVATE_KEY, {expiresIn: '1d' });
-}
 
 async function getUser(req, res) {
     const {uId} = req.params;
