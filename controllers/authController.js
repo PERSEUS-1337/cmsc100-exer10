@@ -68,15 +68,16 @@ async function loginUser(req, res){
             throw {code: 404, msg: api.NOT_FOUND_USER};
 
         // Check if the password matches
-        const matchPass = bcrypt.compare(password, user.password);
+        // const matchPass = await bcrypt.compare(password, user.password);
 
-        if (!matchPass) {
-            throw Error('Incorrect password');
-        }
         // const matchPass = await user.comparePassword(password);
 
-        // if (! (password === user.password))
-        //     throw {code: 400, msg: api.WRONG_PASSWORD};
+        // if (!matchPass) {
+        //     throw Error('Incorrect password');
+        // }
+
+        if (! (password === user.password))
+            throw {code: 400, msg: api.WRONG_PASSWORD};
 
         const token = createToken(user._id); 
 

@@ -1,26 +1,21 @@
 import { useForm } from "react-hook-form";
 import axios from 'axios';
 
-import React, { useState } from 'react';
+import TextInput from '../components/TextInput';
+import PasswordField from '../components/PasswordField';
 
-export default function LoginPage() {
+export default function SignupPage() {
     const { register, handleSubmit,watch, formState: {errors, isDirty }, trigger } = useForm();
-
-    const [alertMessage, setAlertMessage] = useState('');
-    const [isAlertVisible, setIsAlertVisible] = useState(false);
-
+    const password = watch("password");
         
     const onSubmit = async (data) => {
-    try {
-        const response = await axios.post('/api/auth/login', data);
-        console.log(data)
-        console.log(response.data); // Handle the response from the backend
-        setAlertMessage('Success! ' + response.data.msg);
-        setIsAlertVisible(true);
+        try {
+            const response = await axios.post('/api/auth/signup', data);
+            console.log(data)
+            console.log(response.data); // Handle the response from the backend
+            // window.location.reload();
     } catch (error) {
         console.error(error);
-        setAlertMessage('Error: ' + error.response.data.err);
-        setIsAlertVisible(true);
     }
     };
     // Else, window does not refresh
@@ -28,11 +23,51 @@ export default function LoginPage() {
 
     return(
         <div className=' form-control flex-col gap-5 px-20 xl:px-40 w-full h-screen justify-center bg-neutral text-white'>
-            <p className=' text-5xl font-bold text-center'>Login Page</p>
+            <p className=' text-5xl font-bold text-center'>Sign-up Page</p>
             <form onSubmit={handleSubmit(onSubmit, onError, (data) => {
                 // console.log(data)
             })}>
                 <div className=''>
+                    <div className=''>
+                        <label className="label">
+                            <span className="label-text text-white">First name</span>
+                        </label>
+                        <input className='input w-full bg-primary rounded-2xl required:border-red-500 required:border-2' name="fname" required={errors.firstName?.message}
+                            {...register(
+                                "firstName", 
+                                { 
+                                    required: "This is required", 
+                                    maxLength: {
+                                        value: 20,
+                                        message: "Max length is 20"
+                                    }
+                                }
+                            )} 
+                        />
+                        <label className="label">
+                            <span className="label-text-alt text-warning">{errors.firstName?.message}</span>
+                        </label>
+                    </div>
+                    <div className=''>
+                        <label className="label">
+                            <span className="label-text text-white">Last name</span>
+                        </label>
+                        <input className='input w-full bg-primary rounded-2xl required:border-red-500 required:border-2' name="lname" required={errors.lastName?.message}
+                            {...register(
+                                "lastName", 
+                                { 
+                                    required: "This is required", 
+                                    minLength: {
+                                        value: 4,
+                                        message: "Min length is 4"
+                                    }
+                                }
+                            )} 
+                        />
+                        <label className="label">
+                            <span className="label-text-alt text-warning">{errors.lastName?.message}</span>
+                        </label>            
+                    </div>
                     <div className=''>
                         <label className="label">
                             <span className="label-text text-white">Email</span>
@@ -59,7 +94,7 @@ export default function LoginPage() {
                     </div>
                     <div className=''>
                         <div className='flex flex-row justify-between gap-4'>
-                            <div className="w-full">
+                            <div className="w-1/2">
                                 <label className="label">
                                     <span className="label-text text-white">Password</span>
                                 </label>
@@ -85,6 +120,25 @@ export default function LoginPage() {
                                     <span className="label-text-alt text-warning">{errors.password?.message}</span>
                                 </label>
                             </div>
+                            <div className="w-1/2">
+                                <label className="label">
+                                    <span className="label-text text-white">Repeat password</span>
+                                </label>
+                                <input className='input w-full bg-primary rounded-2xl  required:border-red-500 required:border-2' required={errors.repPassword?.message}
+                                    onChange={() => trigger("password")}
+                                    {...register(
+                                        "repPassword", 
+                                        { 
+                                            required: "This is required",                            
+                                            validate: (value) => value === password || "The passwords do not match",
+                                        }
+                                    )}
+                                    disabled={!password}
+                                />
+                            <label className="label">
+                                    <span className="label-text-alt text-warning">{errors.repPassword?.message}</span>
+                                </label>
+                            </div>
                         </div>
                     </div>
                     <div className='flex flex-row justify-between items-center'>
@@ -100,12 +154,6 @@ export default function LoginPage() {
                 </div>
                 <p className='text-sm text-center text-gray-700 py-4'>© 2023 All Rights Reserved</p>
             </form>
-            {isAlertVisible && (
-                <div className="alert">
-                    {alertMessage}
-                    <button onClick={() => setIsAlertVisible(false)}>Close</button>
-                </div>
-            )}
         </div>
     )
 }

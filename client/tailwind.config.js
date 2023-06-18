@@ -3,7 +3,12 @@ module.exports = {
   mode: 'jit',
   darkMode: false, // or 'media' or 'class'
   theme: {
-    extend: {},
+    extend: {
+      
+    },
+    fontFamily: {
+        'poppins': ['Poppins', 'sans-serif']
+      },
   },
   variants: {
     extend: {},
@@ -12,22 +17,14 @@ module.exports = {
       themes: [
         {
           mytheme: {
-            "primary": "#023047",
-                      
-            "secondary": "#219EBC",
-                      
+            "primary": "#219EBC",
+            "secondary": "#8ECAE6",
             "accent": "#FFB703",
-                      
-            "neutral": "#8ECAE6",
-                      
-            "base-100": "#2A303C",
-                      
+            "neutral": "#023047",
+            "base-100": "#f3f4f6",
             "info": "#3ABFF8",
-                      
             "success": "#36D399",
-                      
             "warning": "#FBBD23",
-                      
             "error": "#F87272",
           },
         },

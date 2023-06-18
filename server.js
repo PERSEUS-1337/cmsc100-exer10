@@ -27,9 +27,13 @@ app.use(express.json())
 
 // Prints the backend access logs
 app.use((req, res, next) => {
-  console.info(`[${new Date().toLocaleString()}] [${req.method}] [${req.originalUrl}] [${req.ip}] [${req.get('User-Agent')}]`);
+  console.info(`[${new Date().toLocaleString()}] [${req.method}] [${req.originalUrl}] [${req.ip}]`);
   next();
 });
+// app.use((req, res, next) => {
+//   console.info(`[${new Date().toLocaleString()}] [${req.method}] [${req.originalUrl}] [${req.ip}] [${req.get('User-Agent')}]`);
+//   next();
+// });
 
 // Routes
 app.get('/api', (req, res) => {
