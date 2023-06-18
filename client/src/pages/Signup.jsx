@@ -16,13 +16,13 @@ export default function SignupPage() {
             console.log(data)
             console.log(response.data); // Handle the response from the backend
             setAlertMessage('Success! ' + response.data.msg);
-            // sessionStorage.clear();
-            // sessionStorage.setItem('jwtToken', response.data.token);
-            // setIsAlertVisible(true);
+            sessionStorage.clear();
+            sessionStorage.setItem('jwtToken', response.data.token);
+            setIsAlertVisible(true);
         } catch (error) {
             console.error(error);
-            // setAlertMessage('Error: ' + error.response.data.err);
-            // setIsAlertVisible(true);
+            setAlertMessage('Error: ' + error.response.data.err);
+            setIsAlertVisible(true);
         }
     };
     // Else, window does not refresh
@@ -161,6 +161,12 @@ export default function SignupPage() {
                 </div>
                 <p className='text-sm text-center text-gray-700 py-4'>© 2023 All Rights Reserved</p>
             </form>
+            {isAlertVisible && (
+                <div className="alert">
+                    {alertMessage}
+                    <button onClick={() => setIsAlertVisible(false)}>Close</button>
+                </div>
+            )}
         </div>
     )
 }
