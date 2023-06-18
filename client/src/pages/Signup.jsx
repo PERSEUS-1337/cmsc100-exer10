@@ -1,22 +1,29 @@
 import { useForm } from "react-hook-form";
 import axios from 'axios';
 
-import TextInput from '../components/TextInput';
-import PasswordField from '../components/PasswordField';
+import React, { useState } from 'react';
 
 export default function SignupPage() {
     const { register, handleSubmit,watch, formState: {errors, isDirty }, trigger } = useForm();
     const password = watch("password");
+
+    const [alertMessage, setAlertMessage] = useState('');
+    const [isAlertVisible, setIsAlertVisible] = useState(false);
         
     const onSubmit = async (data) => {
         try {
             const response = await axios.post('/api/auth/signup', data);
             console.log(data)
             console.log(response.data); // Handle the response from the backend
-            // window.location.reload();
-    } catch (error) {
-        console.error(error);
-    }
+            setAlertMessage('Success! ' + response.data.msg);
+            // sessionStorage.clear();
+            // sessionStorage.setItem('jwtToken', response.data.token);
+            // setIsAlertVisible(true);
+        } catch (error) {
+            console.error(error);
+            // setAlertMessage('Error: ' + error.response.data.err);
+            // setIsAlertVisible(true);
+        }
     };
     // Else, window does not refresh
     const onError = (errors, e) => console.log(errors, e);
@@ -32,9 +39,9 @@ export default function SignupPage() {
                         <label className="label">
                             <span className="label-text text-white">First name</span>
                         </label>
-                        <input className='input w-full bg-primary rounded-2xl required:border-red-500 required:border-2' name="fname" required={errors.firstName?.message}
+                        <input className='input w-full bg-primary rounded-2xl required:border-red-500 required:border-2' name="fname" required={errors.fname?.message}
                             {...register(
-                                "firstName", 
+                                "fname", 
                                 { 
                                     required: "This is required", 
                                     maxLength: {
@@ -45,16 +52,16 @@ export default function SignupPage() {
                             )} 
                         />
                         <label className="label">
-                            <span className="label-text-alt text-warning">{errors.firstName?.message}</span>
+                            <span className="label-text-alt text-warning">{errors.fname?.message}</span>
                         </label>
                     </div>
                     <div className=''>
                         <label className="label">
                             <span className="label-text text-white">Last name</span>
                         </label>
-                        <input className='input w-full bg-primary rounded-2xl required:border-red-500 required:border-2' name="lname" required={errors.lastName?.message}
+                        <input className='input w-full bg-primary rounded-2xl required:border-red-500 required:border-2' name="lname" required={errors.lname?.message}
                             {...register(
-                                "lastName", 
+                                "lname", 
                                 { 
                                     required: "This is required", 
                                     minLength: {
@@ -65,7 +72,7 @@ export default function SignupPage() {
                             )} 
                         />
                         <label className="label">
-                            <span className="label-text-alt text-warning">{errors.lastName?.message}</span>
+                            <span className="label-text-alt text-warning">{errors.lname?.message}</span>
                         </label>            
                     </div>
                     <div className=''>

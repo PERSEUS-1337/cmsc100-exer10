@@ -4,26 +4,28 @@ import axios from 'axios';
 import React, { useState } from 'react';
 
 export default function LoginPage() {
-    const { register, handleSubmit,watch, formState: {errors, isDirty }, trigger } = useForm();
+    const { register, handleSubmit, watch, formState: {errors, isDirty }, trigger } = useForm();
+
+    const password = watch("password");
 
     const [alertMessage, setAlertMessage] = useState('');
     const [isAlertVisible, setIsAlertVisible] = useState(false);
 
         
     const onSubmit = async (data) => {
-    try {
-        const response = await axios.post('/api/auth/login', data);
-        console.log(data)
-        console.log(response.data); // Handle the response from the backend
-        setAlertMessage('Success! ' + response.data.msg);
-        sessionStorage.clear();
-        sessionStorage.setItem('jwtToken', response.data.token);
-        setIsAlertVisible(true);
-    } catch (error) {
-        console.error(error);
-        setAlertMessage('Error: ' + error.response.data.err);
-        setIsAlertVisible(true);
-    }
+        try {
+            const response = await axios.post('/api/auth/login', data);
+            console.log(data)
+            console.log(response.data); // Handle the response from the backend
+            setAlertMessage('Success! ' + response.data.msg);
+            sessionStorage.clear();
+            sessionStorage.setItem('jwtToken', response.data.token);
+            setIsAlertVisible(true);
+        } catch (error) {
+            console.error(error);
+            setAlertMessage('Error: ' + error.response.data.err);
+            setIsAlertVisible(true);
+        }
     };
     // Else, window does not refresh
     const onError = (errors, e) => console.log(errors, e);
