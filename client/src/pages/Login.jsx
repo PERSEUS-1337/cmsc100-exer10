@@ -16,6 +16,8 @@ export default function LoginPage() {
         console.log(data)
         console.log(response.data); // Handle the response from the backend
         setAlertMessage('Success! ' + response.data.msg);
+        sessionStorage.clear();
+        sessionStorage.setItem('jwtToken', response.data.token);
         setIsAlertVisible(true);
     } catch (error) {
         console.error(error);
@@ -29,9 +31,7 @@ export default function LoginPage() {
     return(
         <div className=' form-control flex-col gap-5 px-20 xl:px-40 w-full h-screen justify-center bg-neutral text-white'>
             <p className=' text-5xl font-bold text-center'>Login Page</p>
-            <form onSubmit={handleSubmit(onSubmit, onError, (data) => {
-                // console.log(data)
-            })}>
+            <form onSubmit={handleSubmit(onSubmit, onError)}>
                 <div className=''>
                     <div className=''>
                         <label className="label">
