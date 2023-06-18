@@ -34,11 +34,11 @@ async function createUser(req, res) {
         const hash = await bcrypt.hash(password, salt);
     
         const newUser = new User({
-            email,
+            email: email,
             password: hash,
-            password,
-            fname,
-            lname,
+            // password: password,
+            fname: fname,
+            lname: lname,
         });
 
         const savedUser = await newUser.save();
@@ -48,7 +48,7 @@ async function createUser(req, res) {
 
         console.info(api.SUCCESS_USER_CREATED);
         res.status(201).json({msg: api.SUCCESS_USER_CREATED, uId: savedUser._id, token: token });
-        res.redirect(307)
+        // res.redirect(307)
     } catch (err) {
         console.error(api.ERROR_CREATING_USER, err.msg || err);
         return res.status(err.code || 500).json({err: err.msg || api.SERVER_ERROR})
@@ -68,12 +68,13 @@ async function loginUser(req, res){
             throw {code: 404, msg: api.NOT_FOUND_USER};
 
         // Check if the password matches
-        const matchPass = bcrypt.compare(password, user.password);
+        const matchPass = await bcrypt.compare(password, user.password);
 
-        if (!matchPass) {
-            throw Error('Incorrect password');
-        }
         // const matchPass = await user.comparePassword(password);
+
+        if (!matchPass)
+        //     throw Error('Incorrect password');
+            throw {code: 400, msg: api.WRONG_PASSWORD};
 
         // if (! (password === user.password))
         //     throw {code: 400, msg: api.WRONG_PASSWORD};

@@ -1,0 +1,12 @@
+{
+    "launch": {
+        "configurations": [],
+        "compounds": []
+    },
+    "editor.quickSuggestions": {
+        "strings": true
+    },
+    "files.associations": {
+        "*.css": "tailwindcss"
+    }
+}
