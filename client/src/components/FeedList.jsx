@@ -3,11 +3,42 @@ import axios from 'axios';
 import { BiFace, BiCommentDetail } from 'react-icons/bi';
 import { AiOutlineLike } from 'react-icons/ai'
 
+import React from 'react';
 import { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 
 export default function FeedList({uId}) {
     const [feed, setFeed] = useState([]);
     const [likedPosts, setLikedPosts] = useState([]);
+
+    const handleToggleLike = async (pId) => {
+        try {
+            const requestData = {
+                uId: uId,
+                pId: pId
+            };
+
+            // TODO: Show modal alert if success or not
+            const response = await axios.patch('/api/post/like', requestData);
+            // const updatedPost = response.data.post;
+            
+            // For state management whether its liked by user or not
+            const isLiked = likedPosts.includes(pId);
+
+            if (isLiked) {
+                // Unlike the post
+                const updatedLikedPosts = likedPosts.filter((postId) => postId !== pId);
+                setLikedPosts(updatedLikedPosts);
+            } else {
+                // Like the post
+                const updatedLikedPosts = [...likedPosts, pId];
+                setLikedPosts(updatedLikedPosts);
+            }
+
+        } catch (error) {
+            console.error('Error toggling like:', error);
+        }
+    };
 
     useEffect(() => {
         const fetchPosts = async () => {
@@ -66,38 +97,10 @@ export default function FeedList({uId}) {
         fetchPosts();
     }, []);
 
-    const handleToggleLike = async (pId) => {
-        try {
-            const requestData = {
-                uId: uId,
-                pId: pId
-            };
-
-            // TODO: Show modal alert if success or not
-            const response = await axios.patch('/api/post/like', requestData);
-            // const updatedPost = response.data.post;
-            
-            // For state management whether its liked by user or not
-            const isLiked = likedPosts.includes(pId);
-
-            if (isLiked) {
-                // Unlike the post
-                const updatedLikedPosts = likedPosts.filter((postId) => postId !== pId);
-                setLikedPosts(updatedLikedPosts);
-            } else {
-                // Like the post
-                const updatedLikedPosts = [...likedPosts, pId];
-                setLikedPosts(updatedLikedPosts);
-            }
-
-        } catch (error) {
-            console.error('Error toggling like:', error);
-        }
-    };
-
     return(
         <div className='space-y-4'>
             {feed.map((feed) => (
+                <Link to={`/feed/${feed.pId}`}>
                 <div className='flex ' key={feed.pId}>
                     {/* Interaction Column */}
                     <div className='flex-col'>
@@ -135,6 +138,7 @@ export default function FeedList({uId}) {
                         </div>
                     </div>
                 </div>
+                </Link>
             ))}
         </div>
     );
