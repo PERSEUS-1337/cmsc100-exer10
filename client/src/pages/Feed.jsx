@@ -3,6 +3,7 @@ import { GoGitMerge } from 'react-icons/go';
 import { BiFace } from 'react-icons/bi';
 
 import FriendsList from '../components/FriendsList';
+import FeedList from '../components/FeedList';
 
 export default function FeedPage() {
     const uId = sessionStorage.getItem('uId');
@@ -25,7 +26,7 @@ export default function FeedPage() {
             {/* Main Frame */}
             <div className=" flex border-4 border-blue-700 h-screen">
                 {/* SideBar */}
-                <div className=' w-1/3 h-1/4 border-4 border-green-400'>
+                <div className=' w-1/3 h-full border-4 border-green-400'>
                     {/* User Profile Details */}
                     <div className='flex border-2 border-violet-700'>
                         {/* Icon */}
@@ -54,7 +55,9 @@ export default function FeedPage() {
                 </div>
                 {/* Feed Components */}
                 <div className=' w-full h-full border-4 border-orange-700'>
-
+                    <FeedList 
+                        uId={uId}
+                    />
                 </div>
             </div>
         </div>
