@@ -10,10 +10,8 @@ export default function FriendRequests({uId}) {
             try {
                 const response = await axios.get(`/api/user/${uId}/requests`); 
                 const requestIdList = await response.data.requests;
-                console.log(requestIdList)
                 const requestList = [];
                 for (const requestId of requestIdList) {
-                    // console.log(requestId._id)
                     const requestResponse = await axios.get(`/api/user/${requestId._id}`);
                     const requestData = {
                         fname: requestResponse.data.user.fname,
@@ -72,7 +70,7 @@ export default function FriendRequests({uId}) {
     };
 
     return(
-         <div>
+        <div>
         {requests.map((request) => (
             <div className='flex border-2 border-red-700' key={request.fId}>
             {/* Icon */}
