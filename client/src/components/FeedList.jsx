@@ -1,11 +1,12 @@
 import axios from 'axios';
+import React from 'react';
+import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
+import { useState, useEffect } from 'react';
 
 import { BiFace, BiCommentDetail } from 'react-icons/bi';
 import { AiOutlineLike } from 'react-icons/ai'
 
-import React from 'react';
-import { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+
 
 export default function FeedList({uId}) {
     const [feed, setFeed] = useState([]);
@@ -74,8 +75,7 @@ export default function FeedList({uId}) {
                         content: post.content,
                         createdAt: formattedDate,
                         likedByUser: isLiked,
-                        likes: (post.likes).length,
-                        comments: 0
+                        likes: post.likes.length
                     }
                     finalPostList.push(postDataFinal);
                 }
@@ -100,7 +100,7 @@ export default function FeedList({uId}) {
     return(
         <div className='space-y-4'>
             {feed.map((feed) => (
-                <Link to={`/feed/${feed.pId}`}>
+            <Link to={{ pathname: `/feed/${feed.pId}`, state: { body: uId } }} key={feed.pId}>
                 <div className='flex ' key={feed.pId}>
                     {/* Interaction Column */}
                     <div className='flex-col'>

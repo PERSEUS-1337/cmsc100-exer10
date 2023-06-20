@@ -4,15 +4,17 @@ import Signup from './pages/Signup';
 import Login from './pages/Login';
 import Home from './pages/Home';
 import Feed from './pages/Feed';
+import Post from './pages/Post'
 
 function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<Home />}></Route>
-        <Route path="/feed" element={<Feed />}></Route>
-        <Route path="/signup" element={<Signup />}></Route>
-        <Route path="/login" element={<Login />}></Route>
+        <Route path="/" element={<Home />}/>
+        <Route path="/feed" element={<Feed />}/>
+        <Route path="/signup" element={<Signup />}/>
+        <Route path="/login" element={<Login />}/>
+        <Route path="/feed/:pId" element={<Post />} />
       </Routes>
     </BrowserRouter>
   );
