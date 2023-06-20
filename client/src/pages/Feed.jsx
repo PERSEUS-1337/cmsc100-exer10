@@ -3,6 +3,7 @@ import { GoGitMerge } from 'react-icons/go';
 import { BiFace } from 'react-icons/bi';
 
 import FriendsList from '../components/FriendsList';
+import FriendRequests from '../components/FriendRequests';
 import FeedList from '../components/FeedList';
 
 export default function FeedPage() {
@@ -38,17 +39,11 @@ export default function FeedPage() {
                         </div>
                     </div>
                     {/* Friends List */}
-                    <div className='flex border-2 border-red-700'>
-                        {/* Icon */}
-                        <BiFace className='text-4xl'></BiFace>
-                        {/* Details */}
-                        <div className=' flex-col border-2 border-blue-500'>
-                            <h2 className=' text-2xl text-black'>Lorem Ipsum</h2>
-                            <h3 className=' text-xl text-gray-500'>@Lorem Ipsum</h3>
-                        </div>
-                        {/* Button */}
-                        <button className="btn btn-outline btn-error">Remove</button>
-                    </div>
+                    <h2 className='text-4xl'>Friend Requests</h2>
+                    <FriendRequests
+                        uId={uId}
+                    />
+                    <h2 className='text-4xl'>Friends List</h2>
                     <FriendsList
                         uId={uId}
                     />

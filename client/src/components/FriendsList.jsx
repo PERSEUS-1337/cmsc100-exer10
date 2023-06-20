@@ -8,7 +8,7 @@ export default function FriendsList({uId}) {
     useEffect(() => {
         const fetchFriends = async () => {
             try {
-                const response = await axios.get(`/api/user/${uId}/friends`); // Replace with your API endpoint
+                const response = await axios.get(`/api/user/${uId}/friends`); 
                 const friendIdList = await response.data.friends;
                 const friendsList = [];
                 for (const friendId of friendIdList) {
@@ -21,7 +21,8 @@ export default function FriendsList({uId}) {
                     }
                     friendsList.push(friendData);
                 }
-                setFriends(friendsList)
+                setFriends(friendsList);
+                
             } catch (error) {
                 console.error('Error fetching friends:', error);
             }
@@ -30,10 +31,25 @@ export default function FriendsList({uId}) {
         fetchFriends();
     }, []);
 
-    const removeFriend = (friendId) => {
-        // Logic to remove the friend with the given friendId
+    const removeFriend = async (fId) => {
+        try {
+            const data = {
+                "uId": uId,
+                "fId": fId
+            }
+            const response = await axios.delete('/api/user/friend', {data: data});
+            console.info(response.data)
+            const updatedFriends = friends.filter((friend) => friend.fId !== fId);
+            setFriends(updatedFriends);
+            handleRefresh();
+        } catch (error) {
+            console.log(error)
+        }
     };
 
+    const handleRefresh = () => {
+        window.location.reload();
+    };
 
     return(
          <div>
@@ -47,28 +63,11 @@ export default function FriendsList({uId}) {
                 <h3 className='text-xl text-gray-500'>{friend.email}</h3>
             </div>
             {/* Button */}
-            <button className='btn btn-outline btn-error' onClick={() => removeFriend(friend.id)}>
+            <button className='btn btn-outline btn-error' onClick={() => removeFriend(friend.fId)}>
                 Remove
             </button>
             </div>
         ))}
         </div>
-        // <div>
-        // {friends.map((friend) => (
-        //     <div className='flex border-2 border-red-700' key={friend.id}>
-        //     {/* Icon */}
-        //     <BiFace className='text-4xl' />
-        //     {/* Details */}
-        //     <div className='flex-col border-2 border-blue-500'>
-        //         <h2 className='text-2xl text-black'>{friend.name}</h2>
-        //         <h3 className='text-xl text-gray-500'>@{friend.username}</h3>
-        //     </div>
-        //     {/* Button */}
-        //     <button className='btn btn-outline btn-error' onClick={() => removeFriend(friend.id)}>
-        //         Remove
-        //     </button>
-        //     </div>
-        // ))}
-        // </div>
     );
 }
