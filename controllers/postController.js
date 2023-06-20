@@ -65,6 +65,81 @@ async function getUserPosts (req, res) {
   }
 }
 
+// async function GetUserFeedAuthorIds(req, res) {
+//   const { uId } = req.params;
+//   console.log(uId);
+//   try {
+    
+//     if (!validator.default.isMongoId(uId))
+//     throw { code: 400, msg: api.INVALID_ID };
+
+//     const user = await User.findById(uId);
+    
+//     if (!user)
+//       throw { code: 404, msg: api.NOT_FOUND_USER };
+    
+//     const feedPostIds = []
+
+//     for (const pId of user.posts){
+//       feedPostIds.push(pId)
+//       console.log("Post ID:" + pId)
+//     }
+
+//     for (const fId of user.friends) {
+//       const friend = await User.findById(fId);
+//       for (const pId of friend.posts){
+//         feedPostIds.push(pId)
+//         console.log("Friend Post ID:" + pId)
+//       }
+//     }
+
+//     console.log(feedPostIds)
+
+//     // if (!feedPosts || feedPosts.length === 0)
+//     //   throw { code: 404, msg: api.NOT_FOUND_POST };
+
+//     console.info(api.SUCCESS_POST_FETCHED);
+//     return res.status(200).json({ msg: api.SUCCESS_POST_FETCHED, pIds: feedPostIds });
+//   } catch (err) {
+//     console.error(api.ERROR_FETCHING_POST, err.msg || err);
+//     return res.status(err.code || 500).json({ err: err.msg || api.SERVER_ERROR });
+//   }
+// }
+
+async function getUserFeed (req, res) {
+  const { uId } = req.params;
+
+  try {
+    // Get the user's friends
+    const user = await User.findById(uId);
+
+    if (!user || user.length === 0)
+      throw {code: 404, msg: api.NOT_FOUND_USER};
+
+    // Extract the friend IDs
+    const friendIds = user.friends.map(friend => friend._id);
+    
+    // Add the user's ID to include their posts as well
+    friendIds.push(user._id);
+    console.log(friendIds)
+
+    // Fetch posts using $lookup aggregation
+    const feed = await Post.aggregate([
+      {
+        $match: {
+          author: { $in: friendIds }
+        }
+      },
+    ]);
+
+    console.info(api.SUCCESS_POST_FETCHED);
+    return res.status(200).json({ msg: api.SUCCESS_POST_FETCHED, feed });
+  } catch (err) {
+    console.error(api.ERROR_FETCHING_FEED, err.msg || err);
+    return res.status(err.code || 500).json({ err: err.msg || api.SERVER_ERROR });
+  }
+}
+
 async function createPost (req, res) {
   const {uId, content} = req.body;
 
@@ -299,6 +374,8 @@ module.exports = {
   getPost,
   getAllPosts,
   getUserPosts,
+  // GetUserFeedAuthorIds,
+  getUserFeed,
   createPost,
   editPost,
   deletePost,

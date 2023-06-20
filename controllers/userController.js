@@ -50,6 +50,8 @@ async function getFriendsList (req, res) {
             throw {code: 400, msg: api.INVALID_ID};
 
         const user = await User.findById(uId);
+
+        console.log(user)
         
         if (!user || user.length === 0)
             throw {code: 404, msg: api.NOT_FOUND_USER};
@@ -221,8 +223,9 @@ async function rejectFriend (req, res) {
             throw { code: 400, msg: api.INVALID_ID };
 
         const user = await User.findById(uId);
+        const friendUser = await User.findById(fId);
 
-        if (!user)
+        if (!user || !friendUser)
             throw {code: 404, msg: api.NOT_FOUND_USER};
         
         const updatedUser = await User.findOneAndUpdate(
@@ -231,7 +234,13 @@ async function rejectFriend (req, res) {
             { new: true }
         );
 
-        if (!updatedUser)
+        const updatedFriendUser = await User.findOneAndUpdate(
+            { _id: fId, 'friend_request._id': uId },
+            { $pull: { friend_request: { _id: uId } } },
+            { new: true }
+        );
+
+        if (!updatedUser || !updatedFriendUser)
             throw { code: 404, msg: api.NOT_FOUND_FRIEND_REQUEST };
 
         console.info(api.SUCCESS_FRIEND_REQUEST_REJECTED);
@@ -245,12 +254,14 @@ async function rejectFriend (req, res) {
 async function removeFriend (req, res) {
     const {uId, fId} = req.body;
     try {
+        console.log(uId, fId)
         if (!validator.default.isMongoId(uId) || !validator.default.isMongoId(fId))
             throw { code: 400, msg: api.INVALID_ID };
 
         const user = await User.findById(uId);
+        const friendUser = await User.findById(fId);
 
-        if (!user)
+        if (!user || !friendUser)
             throw {code: 404, msg: api.NOT_FOUND_USER};
         
         const updatedUser = await User.findOneAndUpdate(
@@ -259,11 +270,17 @@ async function removeFriend (req, res) {
             { new: true }
         );
 
-        if (!updatedUser)
+        const updatedFriendUser = await User.findOneAndUpdate(
+            { _id: fId, friends: uId },
+            { $pull: { friends: uId } },
+            { new: true }
+        );
+
+        if (!updatedUser || !updatedFriendUser)
             throw { code: 404, msg: api.NOT_FOUND_FRIEND };
 
         console.info(api.SUCCESS_FRIEND_DELETED);
-        return res.status(201).json({ msg: api.SUCCESS_FRIEND_DELETED, user: updatedUser });
+        return res.status(201).json({ msg: api.SUCCESS_FRIEND_DELETED, user: updatedUser, friend: updatedFriendUser });
     } catch (err) {
         console.error(api.ERROR_DELETING_FRIEND, err.msg || err);
         return res.status(err.code || 500).json({ err: err.msg || api.SERVER_ERROR });

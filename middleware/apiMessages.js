@@ -35,6 +35,7 @@ module.exports = {
     SUCCESS_FRIEND_REQUEST_FETCHED: 'Friend requests fetched successfully',
     SUCCESS_FRIEND_REQUEST_SENT: 'Friend request sent successfully',
     SUCCESS_FRIEND_REQUEST_REJECTED: 'Friend request rejected successfully',
+    
     // REQUIRED
     REQUIRED_ALL_FIELDS: 'All fields must be provided',
     // WRONG

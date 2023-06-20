@@ -29,7 +29,7 @@ export default function SignupPage() {
     const onError = (errors, e) => console.log(errors, e);
 
     return(
-        <div className=' form-control flex-col gap-5 px-20 xl:px-40 w-full h-screen justify-center bg-neutral text-white'>
+        <div className=' form-control flex-col gap-5 px-20 xl:px-40 w-full h-screen justify-center bg-neutral text-white font-poppins'>
             <p className=' text-5xl font-bold text-center'>Sign-up Page</p>
             <form onSubmit={handleSubmit(onSubmit, onError, (data) => {
                 // console.log(data)

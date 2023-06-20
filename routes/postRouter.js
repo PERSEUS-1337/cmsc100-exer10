@@ -5,6 +5,8 @@ const {
     getPost,
     getAllPosts,
     getUserPosts,
+    // GetUserFeedAuthorIds,
+    getUserFeed,
     createPost,
     editPost,
     deletePost,
@@ -20,6 +22,7 @@ router.get('/', (req, res, next) => {res.json({msg: 'AUTHORIZED Hello World'});}
 router.get('/all', getAllPosts)
 router.get('/:pId', getPost)
 router.get('/user/:uId', getUserPosts)
+router.get('/user/:uId/feed', getUserFeed)
 
 // POST
 router.post('/', createPost)
@@ -32,5 +35,8 @@ router.patch('/like', toggleLike)
 // DELETE
 router.delete('/', deletePost)
 router.delete('/comment', deleteComment)
+
+// TEST
+router.get('/user/:uId/test', getUserFeed)
 
 module.exports = router;
