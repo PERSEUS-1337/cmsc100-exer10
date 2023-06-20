@@ -106,7 +106,7 @@ async function getUserPosts (req, res) {
 //   }
 // }
 
-const getUserFeed = async (req, res) => {
+async function getUserFeed (req, res) {
   const { uId } = req.params;
 
   try {
@@ -138,9 +138,7 @@ const getUserFeed = async (req, res) => {
     console.error(api.ERROR_FETCHING_FEED, err.msg || err);
     return res.status(err.code || 500).json({ err: err.msg || api.SERVER_ERROR });
   }
-};
-
-
+}
 
 async function createPost (req, res) {
   const {uId, content} = req.body;

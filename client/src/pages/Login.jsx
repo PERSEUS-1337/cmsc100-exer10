@@ -4,9 +4,7 @@ import axios from 'axios';
 import React, { useState } from 'react';
 
 export default function LoginPage() {
-    const { register, handleSubmit, watch, formState: {errors, isDirty }, trigger } = useForm();
-
-    const password = watch("password");
+    const { register, handleSubmit, formState: {errors, isDirty } } = useForm();
 
     const [alertMessage, setAlertMessage] = useState('');
     const [isAlertVisible, setIsAlertVisible] = useState(false);
@@ -15,8 +13,6 @@ export default function LoginPage() {
     const onSubmit = async (data) => {
         try {
             const response = await axios.post('/api/auth/login', data);
-            console.log(data)
-            console.log(response.data); // Handle the response from the backend
             setAlertMessage('Success! ' + response.data.msg);
             sessionStorage.clear();
             sessionStorage.setItem('jwtToken', response.data.token);
@@ -98,7 +94,7 @@ export default function LoginPage() {
                         <button className="btn btn-link text-accent">Forgot Password</button>
                     </div>
                     <div className=''>
-                        <input type="submit" value="Sign-up" disabled={!isDirty} className="btn btn-accent w-full disabled:bg-white" />
+                        <input type="submit" value="Login" disabled={!isDirty} className="btn btn-accent w-full disabled:bg-white" />
                     </div>
                 </div>
                 <p className='text-sm text-center text-gray-700 py-4'>© 2023 All Rights Reserved</p>

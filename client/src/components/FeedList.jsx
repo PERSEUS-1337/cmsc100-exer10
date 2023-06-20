@@ -14,53 +14,111 @@ export default function FeedList({uId}) {
                 const response = await axios.get(`/api/post/user/${uId}/feed`)
                 const responseData = await response.data.feed;
                 const finalPostList = []
-
+                
                 for (const post of responseData) {
                     const userResponse = await axios.get(`/api/user/${post.author}`);
                     const userData = userResponse.data.user;
+                    var isLiked = false;
+
+                    console.log(post.likes)
+                    if ((post.likes).includes(uId)){
+                        isLiked = true;
+                    } else {
+                        isLiked = false;
+                    }
 
                     const date = new Date(post.createdAt);
                     const formattedDate = date.toLocaleString();
-
+                    
                     const postDataFinal = {
                         pId: post._id,
                         uId: userData._id,
                         author: userData.fname + " " + userData.lname,
                         content: post.content,
-                        createdAt: formattedDate
+                        createdAt: formattedDate,
+                        likedByUser: isLiked
                     }
                     finalPostList.push(postDataFinal);
                 }
+
                 setFeed(finalPostList)
             } catch (error) {
                 console.error(error);
             }
         };
         fetchPosts();
+        handleToggleLike();
     }, []);
 
+    const handleToggleLike = async (pId) => {
+        try {
+            const requestData = {
+                uId: uId,
+                pId: pId
+            };
+
+            const response = await axios.patch('/api/post/like', requestData);
+            const updatedPost = response.data.post;
+
+            // Update the like state in the feed list
+            const updatedFeed = feed.map((post) => {
+            if (post.pId === pId) {
+                return {
+                ...post,
+                likes: updatedPost.likes
+                };
+            }
+            return post;
+            });
+
+            setFeed(updatedFeed);
+        } catch (error) {
+            console.error('Error toggling like:', error);
+        }
+    };
+
     return(
-        <div>
+        <div className='space-y-4'>
             {feed.map((feed) => (
-                <div className='flex border-3 border-black' key={feed.pId}>
+                <div className='flex ' key={feed.pId}>
                     {/* Interaction Column */}
                     <div className='flex-col'>
-                        <AiOutlineLike className='text-4xl text-accent'/>
+                        {/* <label className='swap'>
+                            <input type="checkbox" onClick={() => handleToggleLike(feed.pId)} /> */}
+                            {feed.likedByUser ? (
+                                <button onClick={() => handleToggleLike(feed.pId)}>
+                                    <AiOutlineLike className='swap-on text-4xl text-accent' />
+                                </button>
+                            ) : (
+                                <button onClick={() => handleToggleLike(feed.pId)}>
+                                
+                                    <AiOutlineLike className='swap-off text-4xl text-neutral'/>
+                                </button>
+                            )}
+                            {/* <AiOutlineLike className='swap-on text-4xl text-accent'/>
+                            <AiOutlineLike className='swap-off text-4xl text-neutral'/> */}
+                        {/* </label> */}
                         <BiCommentDetail className='text-4xl text-neutral'/>
                     </div>
                     {/* Post Details */}
-                    <div className='flex-col border-4'>
+                    <div className='flex-col '>
                         {/* Post Author */}
-                        <div className='flex border-8'>
+                        <div className='flex '>
                             <BiFace className='text-6xl text-neutral' />
                             <div className='flex-col'>
-                                <h1 className='text-4xl'>{feed.author}</h1>
-                                <p>{feed.createdAt}</p>
+                                <h1 className='text-4xl'>
+                                    {feed.author}
+                                </h1>
+                                <p>
+                                    {feed.createdAt}
+                                </p>
                             </div>
                         </div>
                         {/* Post Content */}
                         <div>
-                            <p className='border-8'>{feed.content}</p>
+                            <p className=''>
+                                {feed.content}
+                                </p>
                         </div>
                     </div>
                 </div>
