@@ -20,6 +20,7 @@ export default function LoginPage() {
             setAlertMessage('Success! ' + response.data.msg);
             sessionStorage.clear();
             sessionStorage.setItem('jwtToken', response.data.token);
+            sessionStorage.setItem('uId', response.data._id);
             setIsAlertVisible(true);
         } catch (error) {
             console.error(error);
@@ -31,7 +32,7 @@ export default function LoginPage() {
     const onError = (errors, e) => console.log(errors, e);
 
     return(
-        <div className=' form-control flex-col gap-5 px-20 xl:px-40 w-full h-screen justify-center bg-neutral text-white'>
+        <div className=' form-control flex-col gap-5 px-20 xl:px-40 w-full h-screen justify-center bg-neutral text-white font-poppins'>
             <p className=' text-5xl font-bold text-center'>Login Page</p>
             <form onSubmit={handleSubmit(onSubmit, onError)}>
                 <div className=''>
