@@ -38,11 +38,12 @@ export default function FeedPage() {
                             <h3 className=' text-xl text-gray-500'>@Lorem Ipsum</h3>
                         </div>
                     </div>
-                    {/* Friends List */}
+                    {/* Friends Requests */}
                     <h2 className='text-4xl'>Friend Requests</h2>
                     <FriendRequests
                         uId={uId}
                     />
+                    {/* Friends List */}
                     <h2 className='text-4xl'>Friends List</h2>
                     <FriendsList
                         uId={uId}

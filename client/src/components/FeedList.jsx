@@ -11,22 +11,29 @@ export default function FeedList({uId}) {
     useEffect(() => {
         const fetchPosts = async () => {
             try {
-                const response = await axios.get(`/api/post/user/${uId}`); 
-                const postResponseData = await response.data.posts;
-                const postList = []
-                for (const post of postResponseData) {
+                const response = await axios.get(`/api/post/user/${uId}/feed`)
+                const responseData = await response.data.feed;
+                const finalPostList = []
+
+                for (const post of responseData) {
                     const userResponse = await axios.get(`/api/user/${post.author}`);
-                    const postData = {
+                    const userData = userResponse.data.user;
+
+                    const date = new Date(post.createdAt);
+                    const formattedDate = date.toLocaleString();
+
+                    const postDataFinal = {
                         pId: post._id,
-                        author: userResponse.data.user.fname + " " + userResponse.data.user.lname,
+                        uId: userData._id,
+                        author: userData.fname + " " + userData.lname,
                         content: post.content,
-                        createdAt: post.createdAt
+                        createdAt: formattedDate
                     }
-                    postList.push(postData);
+                    finalPostList.push(postDataFinal);
                 }
-                setFeed(postList)
+                setFeed(finalPostList)
             } catch (error) {
-                console.error('Error fetching friend requests:', error);
+                console.error(error);
             }
         };
         fetchPosts();
