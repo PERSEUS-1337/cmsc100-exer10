@@ -65,47 +65,6 @@ async function getUserPosts (req, res) {
   }
 }
 
-// async function GetUserFeedAuthorIds(req, res) {
-//   const { uId } = req.params;
-//   console.log(uId);
-//   try {
-    
-//     if (!validator.default.isMongoId(uId))
-//     throw { code: 400, msg: api.INVALID_ID };
-
-//     const user = await User.findById(uId);
-    
-//     if (!user)
-//       throw { code: 404, msg: api.NOT_FOUND_USER };
-    
-//     const feedPostIds = []
-
-//     for (const pId of user.posts){
-//       feedPostIds.push(pId)
-//       console.log("Post ID:" + pId)
-//     }
-
-//     for (const fId of user.friends) {
-//       const friend = await User.findById(fId);
-//       for (const pId of friend.posts){
-//         feedPostIds.push(pId)
-//         console.log("Friend Post ID:" + pId)
-//       }
-//     }
-
-//     console.log(feedPostIds)
-
-//     // if (!feedPosts || feedPosts.length === 0)
-//     //   throw { code: 404, msg: api.NOT_FOUND_POST };
-
-//     console.info(api.SUCCESS_POST_FETCHED);
-//     return res.status(200).json({ msg: api.SUCCESS_POST_FETCHED, pIds: feedPostIds });
-//   } catch (err) {
-//     console.error(api.ERROR_FETCHING_POST, err.msg || err);
-//     return res.status(err.code || 500).json({ err: err.msg || api.SERVER_ERROR });
-//   }
-// }
-
 async function getUserFeed (req, res) {
   const { uId } = req.params;
 
@@ -179,6 +138,7 @@ async function createPost (req, res) {
 
 async function addComment (req, res) {
   const {uId, pId, text} = req.body;
+  console.log(uId, pId, text)
   try {
     
     if (!validator.default.isMongoId(uId) || !validator.default.isMongoId(pId))

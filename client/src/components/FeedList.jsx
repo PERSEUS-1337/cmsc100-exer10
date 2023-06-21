@@ -1,13 +1,46 @@
 import axios from 'axios';
+import React from 'react';
+import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
+import { useState, useEffect } from 'react';
 
-import { BiFace, BiCommentDetail } from 'react-icons/bi';
+import { BiFace } from 'react-icons/bi';
+import { MdTouchApp } from 'react-icons/md'
 import { AiOutlineLike } from 'react-icons/ai'
 
-import { useState, useEffect } from 'react';
+
 
 export default function FeedList({uId}) {
     const [feed, setFeed] = useState([]);
     const [likedPosts, setLikedPosts] = useState([]);
+
+    const handleToggleLike = async (pId) => {
+        try {
+            const requestData = {
+                uId: uId,
+                pId: pId
+            };
+
+            // TODO: Show modal alert if success or not
+            const response = await axios.patch('/api/post/like', requestData);
+            // const updatedPost = response.data.post;
+            
+            // For state management whether its liked by user or not
+            const isLiked = likedPosts.includes(pId);
+
+            if (isLiked) {
+                // Unlike the post
+                const updatedLikedPosts = likedPosts.filter((postId) => postId !== pId);
+                setLikedPosts(updatedLikedPosts);
+            } else {
+                // Like the post
+                const updatedLikedPosts = [...likedPosts, pId];
+                setLikedPosts(updatedLikedPosts);
+            }
+
+        } catch (error) {
+            console.error('Error toggling like:', error);
+        }
+    };
 
     useEffect(() => {
         const fetchPosts = async () => {
@@ -43,8 +76,7 @@ export default function FeedList({uId}) {
                         content: post.content,
                         createdAt: formattedDate,
                         likedByUser: isLiked,
-                        likes: (post.likes).length,
-                        comments: 0
+                        likes: post.likes.length
                     }
                     finalPostList.push(postDataFinal);
                 }
@@ -66,35 +98,6 @@ export default function FeedList({uId}) {
         fetchPosts();
     }, []);
 
-    const handleToggleLike = async (pId) => {
-        try {
-            const requestData = {
-                uId: uId,
-                pId: pId
-            };
-
-            // TODO: Show modal alert if success or not
-            const response = await axios.patch('/api/post/like', requestData);
-            // const updatedPost = response.data.post;
-            
-            // For state management whether its liked by user or not
-            const isLiked = likedPosts.includes(pId);
-
-            if (isLiked) {
-                // Unlike the post
-                const updatedLikedPosts = likedPosts.filter((postId) => postId !== pId);
-                setLikedPosts(updatedLikedPosts);
-            } else {
-                // Like the post
-                const updatedLikedPosts = [...likedPosts, pId];
-                setLikedPosts(updatedLikedPosts);
-            }
-
-        } catch (error) {
-            console.error('Error toggling like:', error);
-        }
-    };
-
     return(
         <div className='space-y-4'>
             {feed.map((feed) => (
@@ -111,7 +114,9 @@ export default function FeedList({uId}) {
                                 {feed.likes}
                             </p>
                         </div>
-                        <BiCommentDetail className='text-4xl text-neutral'/>
+                        <Link to={{ pathname: `/feed/${feed.pId}`, state: { body: uId } }} key={feed.pId}>
+                            <MdTouchApp className='text-4xl text-neutral'/>
+                        </Link>
                     </div>
                     {/* Post Details */}
                     <div className='flex-col '>
@@ -135,6 +140,7 @@ export default function FeedList({uId}) {
                         </div>
                     </div>
                 </div>
+
             ))}
         </div>
     );
