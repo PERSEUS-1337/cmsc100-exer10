@@ -54,11 +54,11 @@ export default function FriendsList({uId}) {
     return(
          <div>
         {friends.map((friend) => (
-            <div className='flex border-2 border-red-700' key={friend.fId}>
+            <div className='flex ' key={friend.fId}>
             {/* Icon */}
             <BiFace className='text-4xl' />
             {/* Details */}
-            <div className='flex-col border-2 border-blue-500'>
+            <div className='flex-col '>
                 <h2 className='text-2xl text-black'>{friend.fname} {friend.lname}</h2>
                 <h3 className='text-xl text-gray-500'>{friend.email}</h3>
             </div>
