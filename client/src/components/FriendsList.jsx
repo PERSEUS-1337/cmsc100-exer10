@@ -11,18 +11,19 @@ export default function FriendsList({uId}) {
                 const response = await axios.get(`/api/user/${uId}/friends`); 
                 const friendIdList = await response.data.friends;
                 const friendsList = [];
-                for (const friendId of friendIdList) {
-                    const friendResponse = await axios.get(`/api/user/${friendId}`);
-                    const friendData = {
-                        fname: friendResponse.data.user.fname,
-                        lname: friendResponse.data.user.lname,
-                        email: friendResponse.data.user.email,
-                        fId: friendResponse.data.user._id,
+                if (friendIdList) {
+                    for (const friendId of friendIdList) {
+                        const friendResponse = await axios.get(`/api/user/${friendId}`);
+                        const friendData = {
+                            fname: friendResponse.data.user.fname,
+                            lname: friendResponse.data.user.lname,
+                            email: friendResponse.data.user.email,
+                            fId: friendResponse.data.user._id,
+                        }
+                        friendsList.push(friendData);
                     }
-                    friendsList.push(friendData);
+                    setFriends(friendsList);
                 }
-                setFriends(friendsList);
-                
             } catch (error) {
                 console.error('Error fetching friends:', error);
             }
@@ -41,7 +42,6 @@ export default function FriendsList({uId}) {
             console.info(response.data)
             const updatedFriends = friends.filter((friend) => friend.fId !== fId);
             setFriends(updatedFriends);
-            handleRefresh();
         } catch (error) {
             console.log(error)
         }

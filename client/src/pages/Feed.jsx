@@ -10,7 +10,9 @@ export default function FeedPage() {
     return(
         <div className="font-poppins">
             {/* Navbar */}
-            <NavBar/>
+            <NavBar
+                uId={uId}
+            />
             {/* Main Frame */}
             <div className=" flex  h-screen">
                 {/* SideBar */}
