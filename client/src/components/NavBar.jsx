@@ -14,7 +14,6 @@ export default function NavBar({uId}) {
         try {
             const response = await axios.get(`/api/user/${uId}/search?search=${searchQuery}`);
             const searchData = response.data.users;
-            console.log(searchData)
             
             const userResponse1 = await axios.get(`api/user/${uId}/friends`)
             const userResponse2 = await axios.get(`api/user/${uId}/requests`)
@@ -31,7 +30,7 @@ export default function NavBar({uId}) {
                     if (userFriendRequests.includes(user._id))
                         user.isAFriend = true
             }
-            console.log(searchData)
+            
             setSearchResults(searchData);
         } catch (error) {
             console.error('Error searching users:', error);
@@ -47,10 +46,14 @@ export default function NavBar({uId}) {
             }
             const response = await axios.post(`/api/user/friend`, data);
             const responseData = response.data;
-            console.log(responseData);
+            handleRefresh();
         } catch (error) {
             console.error('Error sending friend request:', error);
         }
+    };
+
+    const handleRefresh = () => {
+        window.location.reload();
     };
 
     return(

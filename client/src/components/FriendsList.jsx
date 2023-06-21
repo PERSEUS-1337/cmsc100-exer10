@@ -5,32 +5,28 @@ import { useState, useEffect } from 'react';
 export default function FriendsList({uId}) {
     const [friends, setFriends] = useState([]);
 
-    useEffect(() => {
-        const fetchFriends = async () => {
-            try {
-                const response = await axios.get(`/api/user/${uId}/friends`); 
-                const friendIdList = await response.data.friends;
-                const friendsList = [];
-                if (friendIdList) {
-                    for (const friendId of friendIdList) {
-                        const friendResponse = await axios.get(`/api/user/${friendId}`);
-                        const friendData = {
-                            fname: friendResponse.data.user.fname,
-                            lname: friendResponse.data.user.lname,
-                            email: friendResponse.data.user.email,
-                            fId: friendResponse.data.user._id,
-                        }
-                        friendsList.push(friendData);
+    const fetchFriends = async () => {
+        try {
+            const response = await axios.get(`/api/user/${uId}/friends`); 
+            const friendIdList = await response.data.friends;
+            const friendsList = [];
+            if (friendIdList) {
+                for (const friendId of friendIdList) {
+                    const friendResponse = await axios.get(`/api/user/${friendId}`);
+                    const friendData = {
+                        fname: friendResponse.data.user.fname,
+                        lname: friendResponse.data.user.lname,
+                        email: friendResponse.data.user.email,
+                        fId: friendResponse.data.user._id,
                     }
-                    setFriends(friendsList);
+                    friendsList.push(friendData);
                 }
-            } catch (error) {
-                console.error('Error fetching friends:', error);
+                setFriends(friendsList);
             }
-        };
-
-        fetchFriends();
-    }, []);
+        } catch (error) {
+            console.error('Error fetching friends:', error);
+        }
+    };
 
     const removeFriend = async (fId) => {
         try {
@@ -42,6 +38,7 @@ export default function FriendsList({uId}) {
             console.info(response.data)
             const updatedFriends = friends.filter((friend) => friend.fId !== fId);
             setFriends(updatedFriends);
+            handleRefresh();
         } catch (error) {
             console.log(error)
         }
@@ -50,6 +47,10 @@ export default function FriendsList({uId}) {
     const handleRefresh = () => {
         window.location.reload();
     };
+
+    useEffect(() => {
+        fetchFriends();
+    }, []);
 
     return(
          <div>

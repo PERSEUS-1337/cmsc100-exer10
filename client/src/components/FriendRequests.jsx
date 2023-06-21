@@ -81,20 +81,24 @@ export default function FriendRequests({uId}) {
                 <h2 className='text-2xl text-black'>{request.fname} {request.lname}</h2>
                 <h3 className='text-xl text-gray-500'>{request.email}</h3>
             </div>
-            {/* Button */}
-            {/* {request.status === 'received' && (
-            )} */}
             {request.status === 'received' ? (
-                <button className='btn btn-outline btn-success' onClick={() => acceptFriend(request.fId)}>
-                    Accept
-                </button>
-                
+                <div>
+                    <button className='btn btn-outline btn-success' onClick={() => acceptFriend(request.fId)}>
+                        Accept
+                    </button>
+                    <button className='btn btn-outline btn-error' onClick={() => rejectFriend(request.fId)}>
+                        Remove
+                    </button>
+                </div>
             ) : (
-                <p>Request Sent!</p>
+                <div>
+                    <p>Request Sent!</p>
+                    <button className='btn btn-outline btn-error' onClick={() => rejectFriend(request.fId)}>
+                        Cancel Request
+                    </button>
+                </div>
             )}
-            <button className='btn btn-outline btn-error' onClick={() => rejectFriend(request.fId)}>
-                Remove
-            </button>
+            
             </div>
         ))}
         </div>
