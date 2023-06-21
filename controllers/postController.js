@@ -235,7 +235,7 @@ async function editPost (req, res) {
       throw {code: 404, msg: api.NOT_FOUND_POST};
 
     // If post user is same as current user
-    if (uId != post.user)
+    if (uId != post.author)
       throw {code: 404, msg: api.INVALID_AUTHOR};
 
     // Update the post content

@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { useParams } from 'react-router-dom';
 
 import { BiFace, BiEdit } from 'react-icons/bi';
+import { AiOutlineSend } from 'react-icons/ai';
 
 export default function CommentsList({uId, comments}) {
     const { pId } = useParams();
@@ -67,7 +68,7 @@ export default function CommentsList({uId, comments}) {
                     onChange={(e) => setComment(e.target.value)}
                     />
                     <button onClick={handleCommentCreate}>
-                        <BiEdit className='text-4xl text-primary' />
+                        <AiOutlineSend className='text-4xl text-primary' />
                     </button>
                 </div>
             </div>

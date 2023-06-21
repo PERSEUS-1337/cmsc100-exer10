@@ -136,7 +136,7 @@ export default function FeedList({uId}) {
                         <div>
                             <p className=''>
                                 {feed.content}
-                                </p>
+                            </p>
                         </div>
                     </div>
                 </div>

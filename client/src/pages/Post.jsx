@@ -2,7 +2,7 @@ import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
-import { BiFace } from 'react-icons/bi';
+import { BiFace, BiEdit } from 'react-icons/bi';
 import { AiOutlineLike, AiOutlineArrowLeft } from 'react-icons/ai'
 import { MdOutlineDeleteOutline } from 'react-icons/md'
 
@@ -14,8 +14,10 @@ export default function PostPage(){
     const { pId } = useParams();
     const [feed, setPost] = useState([]);
     const [likedPosts, setLikedPosts] = useState([]);
+    const [isEditing, setIsEditing] = useState(false);
+    const [editedContent, setEditedContent] = useState(feed.content);
 
-    const handleToggleLike = async (pId) => {
+    const handleToggleLike = async () => {
         try {
             const requestData = {
                 uId: uId,
@@ -60,6 +62,35 @@ export default function PostPage(){
         }
     };
 
+    const handleSaveContent = async () => {
+        // Save the modified content or cancel the edit mode
+        try {
+            if (isEditing) {
+                // Perform the save operation with editedContent
+                const requestData = {
+                    uId: uId,
+                    pId: pId,
+                    update: editedContent
+                };
+                
+                var updatedPost = feed;
+                updatedPost.content = editedContent
+                
+                const response = await axios.patch('/api/post', requestData);
+                console.log(response.data)
+    
+                // Exit the editing mode
+                setPost(updatedPost)
+                setIsEditing(false);
+            } else {
+                // Enter the editing mode
+                setIsEditing(true);
+            }
+        } catch (error) {
+
+        }
+    };
+
     useEffect(() => {
         const fetchPost = async () => {
             try {
@@ -76,10 +107,13 @@ export default function PostPage(){
                     object.authorName = commentData.fname + " " + commentData.lname;
                 }
 
+                const date = new Date(responseData.createdAt);
+                const formattedDate = date.toLocaleString();
+
                 const postDetails = {
                     aId: responseData.author,
                     author: userData.fname + " " + userData.lname,
-                    createdAt: responseData.createdAt,
+                    createdAt: formattedDate,
                     content: responseData.content,
                     likes: responseData.likes.length,
                     comments: responseData.comments
@@ -112,9 +146,20 @@ export default function PostPage(){
                     <AiOutlineArrowLeft className='text-4xl text-neutral'/>
                     {/* Remove Button */}
                     {feed.aId === uId && (
-                        // <button className="btn" >
+                        <div>
                             <MdOutlineDeleteOutline className='text-4xl text-error' onClick={handleRemovePost}/>
-                        // </button>
+                            {/* <button className='btn btn-primary' onClick={() => setIsEditing(!isEditing)}>
+                                {isEditing ? 'Save' : 'Edit'}
+                            </button> */}
+                            <button className='btn btn-primary' onClick={() => {
+                                if (isEditing) {
+                                    handleSaveContent(feed.aId);
+                                }
+                                setIsEditing(!isEditing);
+                                }}>
+                                {isEditing ? 'Save' : 'Edit'}
+                            </button>
+                        </div>
                     )}
                 </div>
                 {/* Post Details */}
@@ -132,11 +177,26 @@ export default function PostPage(){
                         </div>
                     </div>
                     {/* Post Content */}
-                    <div>
+                    {/* <div>
                         <p className=''>
                             {feed.content}
                         </p>
+                        <textarea className="textarea" placeholder={feed.content}/>
+                        <button className='btn btn-primary'>Edit</button>
+                    </div> */}
+                    <div>
+                        {isEditing ? (
+                            <textarea
+                            value={editedContent}
+                            onChange={(e) => setEditedContent(e.target.value)}
+                            className="textarea"
+                            placeholder={feed.content}
+                            />
+                        ) : (
+                            <p>{feed.content}</p>
+                        )}
                     </div>
+
                     {/* Comments */}
                     <div>
                         <CommentsList

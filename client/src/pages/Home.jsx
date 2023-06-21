@@ -13,13 +13,16 @@ export default function HomePage() {
             <div className="hero-content text-center">
                 <div className="max-w-md">
                 <h1 className="text-5xl font-bold">Hello there</h1>
-                <p className="py-6">Provident cupiditate voluptatem et in. Quaerat fugiat ut assumenda excepturi exercitationem quasi. In deleniti eaque aut repudiandae et a id nisi.</p>
-                <div className=" space-x-10">
+                <p className="py-6">Press any of the buttons to demonstrate my social media app.</p>
+                <div className=" space-x-10 flex justify-center">
                     <button className="btn btn-primary" onClick={() => handleButtonClick('/login')}>
                         Login
                     </button>
                     <button className="btn btn-primary" onClick={() => handleButtonClick('/signup')}>
                         Signup
+                    </button>
+                    <button className="btn btn-primary" onClick={() => handleButtonClick('/feed')}>
+                        Feed
                     </button>
                 </div>
                 </div>
