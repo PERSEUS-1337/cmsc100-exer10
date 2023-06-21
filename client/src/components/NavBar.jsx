@@ -79,20 +79,22 @@ export default function NavBar({uId}) {
                 />
             </div>
             {/* Search Results Dropdown */}
-            <div className="dropdown dropdown-end">
+            <div className="dropdown dropdown-bottom dropdown-end">
                 <label tabIndex={0} className="btn btn-outline btn-primary rounded-btn" onClick={handleSearch}>
                     <BsSearch className='text-4xl'/>
                 </label>
-                <ul tabIndex={0} className="menu flex dropdown-content z-[1] bg-inherit rounded-box w-0 mt-4">
+                <ul tabIndex={0} className="menu flex dropdown-content z-[1] bg-inherit rounded-box mt-4">
                     {searchResults.length > 0 && (
-                        <div className="flex-col bg-white rounded-lg w-max">
+                        <div className="flex-col bg-neutral rounded-lg w-max p-4">
+                            <h1 className='text-xl text-secondary px-4'>Search Results</h1>
+                            <div className="border-b-2 border-gray-400 mx-4"/>
                             {searchResults.map((user) => (
                                 <li key={user._id}><a>
                                     {/* User Details */}
-                                    <BsPersonCircle className='text-4xl text-primary'/>
+                                    <BsPersonCircle className='text-4xl text-accent'/>
                                     <div key={user._id} className="px-4 py-2">
-                                        <p className='text-2xl text-black'>{user.fname} {user.lname}</p>
-                                        <p className='text-gray-500'>{user.email}</p>
+                                        <p className='text-2xl font-bold text-secondary'>{user.fname} {user.lname}</p>
+                                        <p className='text-base-100'>{user.email}</p>
                                     </div>
                                     {/* Send Friend Request button */}
                                     {!user.isAFriend && (
