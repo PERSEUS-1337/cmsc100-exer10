@@ -7,8 +7,6 @@ import { BiFace } from 'react-icons/bi';
 import { MdTouchApp } from 'react-icons/md'
 import { AiOutlineLike } from 'react-icons/ai'
 
-
-
 export default function FeedList({uId}) {
     const [feed, setFeed] = useState([]);
     const [likedPosts, setLikedPosts] = useState([]);
@@ -22,21 +20,29 @@ export default function FeedList({uId}) {
 
             // TODO: Show modal alert if success or not
             const response = await axios.patch('/api/post/like', requestData);
-            // const updatedPost = response.data.post;
+            const updatedPost = response.data.post;
             
             // For state management whether its liked by user or not
-            const isLiked = likedPosts.includes(pId);
+            // Update the feed state with the updated post
+            const updatedFeed = feed.map((post) => {
+                if (post.pId === pId) {
+                return {
+                    ...post,
+                    likes: updatedPost.likes.length
+                };
+                }
+                return post;
+            });
+            setFeed(updatedFeed);
 
-            if (isLiked) {
-                // Unlike the post
+            // Update the likedPosts state based on the user's action
+            if (likedPosts.includes(pId)) {
                 const updatedLikedPosts = likedPosts.filter((postId) => postId !== pId);
                 setLikedPosts(updatedLikedPosts);
             } else {
-                // Like the post
                 const updatedLikedPosts = [...likedPosts, pId];
                 setLikedPosts(updatedLikedPosts);
             }
-
         } catch (error) {
             console.error('Error toggling like:', error);
         }
