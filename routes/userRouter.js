@@ -4,6 +4,7 @@ const router = express.Router();
 const {
     getUser,
     getAllUsers,
+    searchUsers,
     getFriendsList,
     getFriendRequests,
     addFriend,
@@ -19,6 +20,7 @@ router.get('/', (req, res, next) => {res.json({msg: 'AUTHORIZED Hello World'});}
 // GET
 router.get('/all', getAllUsers)
 router.get('/:uId', getUser)
+router.get('/:uId/search', searchUsers)
 router.get('/:uId/friends', getFriendsList)
 router.get('/:uId/requests', getFriendRequests)
 

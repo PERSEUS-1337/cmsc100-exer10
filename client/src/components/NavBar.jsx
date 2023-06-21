@@ -1,9 +1,25 @@
 import { BsSearch } from 'react-icons/bs';
 import { GoGitMerge } from 'react-icons/go';
 
+import { useState } from 'react';
+import axios from 'axios';
+
 import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
 
 export default function NavBar() {
+    const [searchQuery, setSearchQuery] = useState('');
+    const [searchResults, setSearchResults] = useState([]);
+
+    const handleSearch = async () => {
+        try {
+            const response = await axios.get(`/api/user/${uId}/search?search=${searchQuery}`);
+            const searchData = response.data;
+            setSearchResults(searchData);
+        } catch (error) {
+            console.error('Error searching users:', error);
+        }
+    };
+
     return(
         <div className=" h-20 flex gap-4">
                 {/* Logo */}
