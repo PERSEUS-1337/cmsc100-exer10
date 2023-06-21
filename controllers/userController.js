@@ -81,8 +81,6 @@ async function getFriendsList (req, res) {
             throw {code: 400, msg: api.INVALID_ID};
 
         const user = await User.findById(uId);
-
-        console.log(user)
         
         if (!user || user.length === 0)
             throw {code: 404, msg: api.NOT_FOUND_USER};

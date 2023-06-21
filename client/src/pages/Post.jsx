@@ -98,8 +98,10 @@ export default function PostPage(){
     }, [pId]);
     
     return(
-        <div>
-            <NavBar />
+        <div className='font-poppins bg-slate-400 sm:px-10 lg:px-40 py-2'>
+            <NavBar 
+                uId={uId}
+            />
             <div className='flex ' key={feed.pId}>
                 {/* Interaction Column */}
                 <div className='flex-col'>
