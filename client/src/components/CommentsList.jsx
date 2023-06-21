@@ -53,9 +53,10 @@ export default function CommentsList({uId, comments}) {
         <div>
             <div className='flex-col'>
             {isAlertVisible && (
-                <div className="alert">
-                    {alertMessage}
-                    <button onClick={() => setIsAlertVisible(false)}>Close</button>
+                <div className="alert alert-success">
+                    <span>
+                        {alertMessage}
+                    </span>
                 </div>
             )}
             <div className="border-b-2 border-gray-400"/>
