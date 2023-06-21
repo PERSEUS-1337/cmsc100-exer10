@@ -27,8 +27,6 @@ export default function PostPage(){
 
             // TODO: Show modal alert if success or not
             const response = await axios.delete('/api/post', {data: requestData});
-            console.log(response.data)
-
         } catch (error) {
             console.error('Error toggling like:', error);
         }
@@ -49,7 +47,6 @@ export default function PostPage(){
                 updatedPost.content = editedContent
                 
                 const response = await axios.patch('/api/post', requestData);
-                console.log(response.data)
     
                 // Exit the editing mode
                 setPost(updatedPost)
@@ -89,8 +86,8 @@ export default function PostPage(){
                 likes: responseData.likes.length,
                 comments: responseData.comments
             }
+            
             setPost(postDetails)
-            console.log(postDetails)
         } catch (error) {
             console.error(error);
         }

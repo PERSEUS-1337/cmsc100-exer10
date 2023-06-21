@@ -18,7 +18,12 @@ export default function NavBar({uId}) {
             const userResponse1 = await axios.get(`api/user/${uId}/friends`)
             const userResponse2 = await axios.get(`api/user/${uId}/requests`)
             const userFriends = userResponse1.data.friends;
-            const userFriendRequests = userResponse2.data.friends;
+            const userFriendRequests = userResponse2.data.requests;
+
+            console.log(userFriends)
+            console.log(userFriendRequests)
+
+            const reduceduserFriendRequests = userFriendRequests.map((obj) => obj._id);
 
             for (const user of searchData){
                 user.isAFriend = false
@@ -26,11 +31,12 @@ export default function NavBar({uId}) {
                     if (userFriends.includes(user._id))
                         user.isAFriend = true
 
-                if (userFriendRequests)
-                    if (userFriendRequests.includes(user._id))
+                if (reduceduserFriendRequests)
+                    if (reduceduserFriendRequests.includes(user._id))
                         user.isAFriend = true
+                
             }
-            
+
             setSearchResults(searchData);
         } catch (error) {
             console.error('Error searching users:', error);

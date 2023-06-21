@@ -5,34 +5,29 @@ import { useState, useEffect } from 'react';
 export default function FriendRequests({uId}) {
     const [requests, setRequests] = useState([]);
 
-    useEffect(() => {
-        const fetchFriendRequests = async () => {
-            try {
-                const response = await axios.get(`/api/user/${uId}/requests`); 
-                const requestIdList = await response.data.requests;
-                const requestList = [];
-                if (requestIdList){
-                    for (const requestId of requestIdList) {
-                        const requestResponse = await axios.get(`/api/user/${requestId._id}`);
-                        const requestData = {
-                            fname: requestResponse.data.user.fname,
-                            lname: requestResponse.data.user.lname,
-                            email: requestResponse.data.user.email,
-                            fId: requestResponse.data.user._id,
-                            status: requestId.status
-                        }
-                        requestList.push(requestData);
+    const fetchFriendRequests = async () => {
+        try {
+            const response = await axios.get(`/api/user/${uId}/requests`); 
+            const requestIdList = await response.data.requests;
+            const requestList = [];
+            if (requestIdList){
+                for (const requestId of requestIdList) {
+                    const requestResponse = await axios.get(`/api/user/${requestId._id}`);
+                    const requestData = {
+                        fname: requestResponse.data.user.fname,
+                        lname: requestResponse.data.user.lname,
+                        email: requestResponse.data.user.email,
+                        fId: requestResponse.data.user._id,
+                        status: requestId.status
                     }
-                    console.log(requestList)
-                    setRequests(requestList)
+                    requestList.push(requestData);
                 }
-            } catch (error) {
-                console.error('Error fetching friend requests:', error);
+                setRequests(requestList)
             }
-        };
-
-        fetchFriendRequests();
-    }, []);
+        } catch (error) {
+            console.error('Error fetching friend requests:', error);
+        }
+    };
 
     // ACCEPT FRIEND REQUEST
     const acceptFriend = async (fId) => {
@@ -69,6 +64,10 @@ export default function FriendRequests({uId}) {
     const handleRefresh = () => {
         window.location.reload();
     };
+
+    useEffect(() => {
+        fetchFriendRequests();
+    }, []);
 
     return(
         <div>
