@@ -1,5 +1,3 @@
-import { BiFace } from 'react-icons/bi';
-
 import NavBar from '../components/NavBar';
 import SideBar from '../components/SideBar';
 
