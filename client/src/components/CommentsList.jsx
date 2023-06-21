@@ -53,25 +53,32 @@ export default function CommentsList({uId, comments}) {
         <div>
             <div className='flex-col'>
             {isAlertVisible && (
-                <div className="alert">
-                    {alertMessage}
-                    <button onClick={() => setIsAlertVisible(false)}>Close</button>
+                <div className="alert alert-success">
+                    <span>
+                        {alertMessage}
+                    </span>
                 </div>
             )}
             <div className="border-b-2 border-gray-400"/>
                 <div className='flex justify-between'>
-                    <BiFace className='text-4xl text-neutral' />
-                    <textarea 
-                    className="textarea textarea-ghost"
-                    placeholder="Write a comment"
-                    value={comment}
-                    onChange={(e) => setComment(e.target.value)}
-                    />
+                    {/* <textarea 
+                        className="textarea textarea-ghost"
+                        placeholder="Write a comment"
+                        value={comment}
+                        onChange={(e) => setComment(e.target.value)}
+                    /> */}
+                    <div className="form-control w-full max-w-xs">
+                        <label className="label">
+                            <span className="label-text">Write a comment</span>
+                        </label>
+                        <input type="text" placeholder="Type here" value={comment} onChange={(e) => setComment(e.target.value)} className="input input-bordered w-full max-w-xs" />
+                    </div>
                     <button onClick={handleCommentCreate}>
                         <AiOutlineSend className='text-4xl text-primary' />
                     </button>
                 </div>
             </div>
+            
             {comments?.map((comment) => (
                 <div key={comment._id}>
                     <h1 className='text-4xl'>{comment.authorName}</h1>

@@ -1,6 +1,8 @@
 const express = require('express');
 const router = express.Router();
 
+// const requireAuth = require('../middleware/requireAuth');
+
 const {
     getPost,
     getAllPosts,
@@ -14,6 +16,8 @@ const {
     addComment,
     deleteComment
 } = require('../controllers/postController')
+
+// router.use(requireAuth);
 
 // Sample API Call
 router.get('/', (req, res, next) => {res.json({msg: 'AUTHORIZED Hello World'});});

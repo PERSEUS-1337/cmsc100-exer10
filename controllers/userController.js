@@ -74,43 +74,6 @@ async function searchUsers(req, res) {
     }
 }
 
-// async function searchUsers(req, res) {
-//     const { uId } = req.params;
-//     const { search } = req.query;
-
-//     try {
-//         let query = {
-//             _id: { $ne: uId }, // Exclude the user
-//         };
-
-//         console.log(search)
-
-//         if (search) {
-//             const regex = new RegExp(search, 'i');
-//             query = {
-//                 ...query,
-//                 $or: [
-//                 { fname: regex }, // Match first name
-//                 { lname: regex }, // Match last name
-//                 { email: regex }, // Match email
-//                 ],
-//             };
-//         }
-
-//         const users = await User.find(query).select('fname lname email');
-
-//         if (users.length === 0)
-//             throw { code: 404, msg: api.NOT_FOUND_USER };
-        
-//         console.info(api.SUCCESS_USER_FETCHED);
-//         return res.status(200).json({ msg: api.SUCCESS_USER_FETCHED, users });
-//     } catch (err) {
-//         console.error(api.ERROR_FETCHING_USER, err.msg || err);
-//         return res.status(err.code || 500).json({ err: err.msg || api.SERVER_ERROR });
-//     }
-// }
-
-
 async function getFriendsList (req, res) {
     const {uId} = req.params;
     try {
@@ -153,7 +116,7 @@ async function getFriendRequests(req, res) {
 
         if (!requestList || requestList.length === 0)
             // throw {code: 404, msg: api.NOT_FOUND_FRIEND_REQUEST};
-            return res.status(200).json({msg: api.ERROR_FETCHING_FRIEND_REQUEST, friends: requestList});
+            return res.status(200).json({msg: api.ERROR_FETCHING_FRIEND_REQUEST, requests: requestList});
         
         console.info(api.SUCCESS_FRIEND_REQUEST_FETCHED);
         return res.status(200).json({msg: api.SUCCESS_FRIEND_REQUEST_FETCHED, requests: requestList});
