@@ -72,11 +72,11 @@ export default function FriendRequests({uId}) {
     return(
         <div>
         {requests.map((request) => (
-            <div className='flex border-2 border-red-700' key={request.fId}>
+            <div className='flex ' key={request.fId}>
             {/* Icon */}
             <BiFace className='text-4xl' />
             {/* Details */}
-            <div className='flex-col border-2 border-blue-500'>
+            <div className='flex-col '>
                 <h2 className='text-2xl text-black'>{request.fname} {request.lname}</h2>
                 <h3 className='text-xl text-gray-500'>{request.email}</h3>
             </div>

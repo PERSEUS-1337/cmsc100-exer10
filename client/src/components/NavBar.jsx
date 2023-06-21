@@ -1,4 +1,4 @@
-import { BsSearch, BsPersonAdd } from 'react-icons/bs';
+import { BsSearch, BsPersonAdd, BsPersonCircle } from 'react-icons/bs';
 import { GoGitMerge } from 'react-icons/go';
 
 import { useState } from 'react';
@@ -19,9 +19,6 @@ export default function NavBar({uId}) {
             const userResponse2 = await axios.get(`api/user/${uId}/requests`)
             const userFriends = userResponse1.data.friends;
             const userFriendRequests = userResponse2.data.requests;
-
-            console.log(userFriends)
-            console.log(userFriendRequests)
 
             const reduceduserFriendRequests = userFriendRequests.map((obj) => obj._id);
 
@@ -63,41 +60,43 @@ export default function NavBar({uId}) {
     };
 
     return(
-        <div className=" navbar bg-base-300 rounded-box h-20 flex gap-4">
+        <div className=" navbar bg-white rounded-box h-20 flex gap-4">
             {/* Logo */}
             <Link to='/'>
-                <div className='flex '>
+                <div className='flex btn text-neutral btn-ghost normal-case'>
                     <GoGitMerge className='text-4xl'></GoGitMerge>
                     <h1 className=' text-4xl'>BookFace</h1>
                 </div>
             </Link>
             {/* Search Bar */}
-            <div className="flex gap-4">
+            <div className="flex">
                 <input
                     type="text"
-                    placeholder="Search for a user on Bookface"
-                    className="input input-bordered w-full max-w-xs"
+                    placeholder="Search for a user"
+                    className="input input-primary "
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                 />
             </div>
+            {/* Search Results Dropdown */}
             <div className="dropdown dropdown-end">
-                <label tabIndex={0} className="btn btn-primary rounded-btn" onClick={handleSearch}>
-                    Search
+                <label tabIndex={0} className="btn btn-outline btn-primary rounded-btn" onClick={handleSearch}>
+                    <BsSearch className='text-4xl'/>
                 </label>
-                {/* Search Results Dropdown */}
                 <ul tabIndex={0} className="menu flex dropdown-content z-[1] bg-inherit rounded-box w-0 mt-4">
                     {searchResults.length > 0 && (
-                        <div className="flex-col absolute bg-white shadow-lg mt-2 py-2 rounded-lg">
+                        <div className="flex-col bg-white rounded-lg w-max">
                             {searchResults.map((user) => (
                                 <li key={user._id}><a>
+                                    {/* User Details */}
+                                    <BsPersonCircle className='text-4xl text-primary'/>
                                     <div key={user._id} className="px-4 py-2">
                                         <p className='text-2xl text-black'>{user.fname} {user.lname}</p>
-                                        <p>{user.email}</p>
+                                        <p className='text-gray-500'>{user.email}</p>
                                     </div>
                                     {/* Send Friend Request button */}
                                     {!user.isAFriend && (
-                                        <button className='btn btn-primary btn-outline' onClick={() => sendFriendRequest(user._id)}>
+                                        <button className='btn btn-accent btn-outline' onClick={() => sendFriendRequest(user._id)}>
                                             <BsPersonAdd className='text-4xl'/>
                                         </button>
                                     )}
