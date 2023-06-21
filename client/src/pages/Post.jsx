@@ -2,12 +2,12 @@ import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
-import { BiFace, BiCommentDetail } from 'react-icons/bi';
-import { AiOutlineLike } from 'react-icons/ai'
+import { BiFace } from 'react-icons/bi';
+import { AiOutlineLike, AiOutlineArrowLeft } from 'react-icons/ai'
+import { MdOutlineDeleteOutline } from 'react-icons/md'
 
 import NavBar from '../components/NavBar';
 import CommentsList from '../components/CommentsList';
-
 
 export default function PostPage(){
     const uId = sessionStorage.getItem('uId');
@@ -44,6 +44,22 @@ export default function PostPage(){
         }
     };
 
+    const handleRemovePost = async () => {
+        try {
+            const requestData = {
+                uId: uId,
+                pId: pId
+            };
+
+            // TODO: Show modal alert if success or not
+            const response = await axios.delete('/api/post', {data: requestData});
+            console.log(response.data)
+
+        } catch (error) {
+            console.error('Error toggling like:', error);
+        }
+    };
+
     useEffect(() => {
         const fetchPost = async () => {
             try {
@@ -61,6 +77,7 @@ export default function PostPage(){
                 }
 
                 const postDetails = {
+                    aId: responseData.author,
                     author: userData.fname + " " + userData.lname,
                     createdAt: responseData.createdAt,
                     content: responseData.content,
@@ -68,7 +85,7 @@ export default function PostPage(){
                     comments: responseData.comments
                 }
                 setPost(postDetails)
-                console.log(feed)
+                console.log(postDetails)
             } catch (error) {
                 console.error(error);
             }
@@ -92,7 +109,13 @@ export default function PostPage(){
                             {feed.likes}
                         </p>
                     </div>
-                    <BiCommentDetail className='text-4xl text-neutral'/>
+                    <AiOutlineArrowLeft className='text-4xl text-neutral'/>
+                    {/* Remove Button */}
+                    {feed.aId === uId && (
+                        // <button className="btn" >
+                            <MdOutlineDeleteOutline className='text-4xl text-error' onClick={handleRemovePost}/>
+                        // </button>
+                    )}
                 </div>
                 {/* Post Details */}
                 <div className='flex-col '>
@@ -112,7 +135,7 @@ export default function PostPage(){
                     <div>
                         <p className=''>
                             {feed.content}
-                            </p>
+                        </p>
                     </div>
                     {/* Comments */}
                     <div>

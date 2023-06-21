@@ -3,7 +3,8 @@ import React from 'react';
 import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 
-import { BiFace, BiCommentDetail } from 'react-icons/bi';
+import { BiFace } from 'react-icons/bi';
+import { MdTouchApp } from 'react-icons/md'
 import { AiOutlineLike } from 'react-icons/ai'
 
 
@@ -114,7 +115,7 @@ export default function FeedList({uId}) {
                             </p>
                         </div>
                         <Link to={{ pathname: `/feed/${feed.pId}`, state: { body: uId } }} key={feed.pId}>
-                            <BiCommentDetail className='text-4xl text-neutral'/>
+                            <MdTouchApp className='text-4xl text-neutral'/>
                         </Link>
                     </div>
                     {/* Post Details */}
