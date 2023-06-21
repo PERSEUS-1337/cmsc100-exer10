@@ -1,6 +1,7 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
 
 import { BiFace, BiEdit } from 'react-icons/bi';
 import { AiOutlineLike, AiOutlineArrowLeft } from 'react-icons/ai'
@@ -12,39 +13,54 @@ import CommentsList from '../components/CommentsList';
 export default function PostPage(){
     const uId = sessionStorage.getItem('uId');
     const { pId } = useParams();
+    
     const [feed, setPost] = useState([]);
-    const [likedPosts, setLikedPosts] = useState([]);
+    // const [likedPosts, setLikedPosts] = useState([]);
     const [isEditing, setIsEditing] = useState(false);
     const [editedContent, setEditedContent] = useState(feed.content);
 
-    const handleToggleLike = async () => {
-        try {
-            const requestData = {
-                uId: uId,
-                pId: pId
-            };
+    // const handleToggleLike = async () => {
+    //     try {
+    //         const requestData = {
+    //             uId: uId,
+    //             pId: pId
+    //         };
 
-            // TODO: Show modal alert if success or not
-            const response = await axios.patch('/api/post/like', requestData);
-            // const updatedPost = response.data.post;
+    //         // TODO: Show modal alert if success or not
+    //         const response = await axios.patch('/api/post/like', requestData);
+    //         // const updatedPost = response.data.post;
             
-            // For state management whether its liked by user or not
-            const isLiked = likedPosts.includes(pId);
+    //         // For state management whether its liked by user or not
+    //         const isLiked = likedPosts.includes(pId);
 
-            if (isLiked) {
-                // Unlike the post
-                const updatedLikedPosts = likedPosts.filter((postId) => postId !== pId);
-                setLikedPosts(updatedLikedPosts);
-            } else {
-                // Like the post
-                const updatedLikedPosts = [...likedPosts, pId];
-                setLikedPosts(updatedLikedPosts);
-            }
-
-        } catch (error) {
-            console.error('Error toggling like:', error);
-        }
-    };
+    //         // if (isLiked) {
+    //         //     // Unlike the post
+    //         //     const updatedLikedPosts = likedPosts.filter((postId) => postId !== pId);
+    //         //     setLikedPosts(updatedLikedPosts);
+    //         // } else {
+    //         //     // Like the post
+    //         //     const updatedLikedPosts = [...likedPosts, pId];
+    //         //     setLikedPosts(updatedLikedPosts);
+    //         // }
+    //         if (feed.liked) {
+    //             // Unlike the post
+    //             setPost((prevPost) => ({
+    //                 ...prevPost,
+    //                 liked: false,
+    //                 likes: prevPost.likes - 1,
+    //             }));
+    //         } else {
+    //             // Like the post
+    //             setPost((prevPost) => ({
+    //                 ...prevPost,
+    //                 liked: true,
+    //                 likes: prevPost.likes + 1,
+    //             }));
+    //         }
+    //     } catch (error) {
+    //         console.error('Error toggling like:', error);
+    //     }
+    // };
 
     const handleRemovePost = async () => {
         try {
@@ -91,39 +107,40 @@ export default function PostPage(){
         }
     };
 
-    useEffect(() => {
-        const fetchPost = async () => {
-            try {
-                // Get the feed of the user that contains user posts and friends' posts
-                const response = await axios.get(`/api/post/${pId}`)
-                const responseData = response.data.post;
-                
-                const userResponse = await axios.get(`/api/user/${responseData.author}`)
-                const userData = userResponse.data.user;
-                
-                for (const object of responseData.comments) {
-                    const commentResponse = await axios.get(`/api/user/${object.author}`);
-                    const commentData = commentResponse.data.user;
-                    object.authorName = commentData.fname + " " + commentData.lname;
-                }
-
-                const date = new Date(responseData.createdAt);
-                const formattedDate = date.toLocaleString();
-
-                const postDetails = {
-                    aId: responseData.author,
-                    author: userData.fname + " " + userData.lname,
-                    createdAt: formattedDate,
-                    content: responseData.content,
-                    likes: responseData.likes.length,
-                    comments: responseData.comments
-                }
-                setPost(postDetails)
-                console.log(postDetails)
-            } catch (error) {
-                console.error(error);
+    const fetchPost = async () => {
+        try {
+            // Get the feed of the user that contains user posts and friends' posts
+            const response = await axios.get(`/api/post/${pId}`)
+            const responseData = response.data.post;
+            
+            const userResponse = await axios.get(`/api/user/${responseData.author}`)
+            const userData = userResponse.data.user;
+            
+            for (const object of responseData.comments) {
+                const commentResponse = await axios.get(`/api/user/${object.author}`);
+                const commentData = commentResponse.data.user;
+                object.authorName = commentData.fname + " " + commentData.lname;
             }
-        };
+
+            const date = new Date(responseData.createdAt);
+            const formattedDate = date.toLocaleString();
+
+            const postDetails = {
+                aId: responseData.author,
+                author: userData.fname + " " + userData.lname,
+                createdAt: formattedDate,
+                content: responseData.content,
+                likes: responseData.likes.length,
+                comments: responseData.comments
+            }
+            setPost(postDetails)
+            console.log(postDetails)
+        } catch (error) {
+            console.error(error);
+        }
+    };
+    
+    useEffect(() => {
         fetchPost();
     }, [pId]);
     
@@ -133,17 +150,26 @@ export default function PostPage(){
             <div className='flex ' key={feed.pId}>
                 {/* Interaction Column */}
                 <div className='flex-col'>
-                    <div>
+                    {/* <div>
                         <label className='swap'>
-                            <input type="checkbox" checked={likedPosts.includes(feed.pId)} onChange={() => handleToggleLike(feed.pId)} />
+                            <input
+                                type="checkbox"
+                                checked={feed?.liked}
+                                onChange={handleToggleLike}
+                            />
                             <AiOutlineLike className='swap-on text-4xl text-accent'/>
                             <AiOutlineLike className='swap-off text-4xl text-neutral'/>
                         </label>
                         <p>
                             {feed.likes}
                         </p>
-                    </div>
-                    <AiOutlineArrowLeft className='text-4xl text-neutral'/>
+                    </div> */}
+                    <Link to='/feed'>
+                        <button className='btn'>
+
+                            <AiOutlineArrowLeft className='text-4xl text-neutral'/>
+                        </button>
+                    </Link>
                     {/* Remove Button */}
                     {feed.aId === uId && (
                         <div>
@@ -177,13 +203,6 @@ export default function PostPage(){
                         </div>
                     </div>
                     {/* Post Content */}
-                    {/* <div>
-                        <p className=''>
-                            {feed.content}
-                        </p>
-                        <textarea className="textarea" placeholder={feed.content}/>
-                        <button className='btn btn-primary'>Edit</button>
-                    </div> */}
                     <div>
                         {isEditing ? (
                             <textarea

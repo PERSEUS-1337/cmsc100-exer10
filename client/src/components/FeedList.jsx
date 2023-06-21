@@ -113,7 +113,10 @@ export default function FeedList({uId}) {
                     <div className='flex-col'>
                         <div>
                             <label className='swap'>
-                                <input type="checkbox" checked={likedPosts.includes(feed.pId)} onChange={() => handleToggleLike(feed.pId)} />
+                                    <input type="checkbox"
+                                    checked={likedPosts.includes(feed.pId)}
+                                    onChange={() => handleToggleLike(feed.pId)}
+                                />
                                 <AiOutlineLike className='swap-on text-4xl text-accent'/>
                                 <AiOutlineLike className='swap-off text-4xl text-neutral'/>
                             </label>
@@ -121,33 +124,31 @@ export default function FeedList({uId}) {
                                 {feed.likes}
                             </p>
                         </div>
-                        <Link to={{ pathname: `/feed/${feed.pId}`, state: { body: uId } }} key={feed.pId}>
-                            <MdTouchApp className='text-4xl text-neutral'/>
-                        </Link>
                     </div>
                     {/* Post Details */}
-                    <div className='flex-col '>
-                        {/* Post Author */}
-                        <div className='flex '>
-                            <BiFace className='text-6xl text-neutral' />
-                            <div className='flex-col'>
-                                <h1 className='text-4xl'>
-                                    {feed.author}
-                                </h1>
-                                <p>
-                                    {feed.createdAt}
+                    <Link to={{ pathname: `/feed/${feed.pId}`, state: { body: uId } }} key={feed.pId}>
+                        <div className='flex-col'>
+                            {/* Post Author */}
+                            <div className='flex '>
+                                <BiFace className='text-6xl text-neutral' />
+                                <div className='flex-col'>
+                                    <h1 className='text-4xl'>
+                                        {feed.author}
+                                    </h1>
+                                    <p>
+                                        {feed.createdAt}
+                                    </p>
+                                </div>
+                            </div>
+                            {/* Post Content */}
+                            <div>
+                                <p className=''>
+                                    {feed.content}
                                 </p>
                             </div>
                         </div>
-                        {/* Post Content */}
-                        <div>
-                            <p className=''>
-                                {feed.content}
-                            </p>
-                        </div>
-                    </div>
+                    </Link>
                 </div>
-
             ))}
         </div>
     );
