@@ -78,7 +78,6 @@ export default function PostPage(){
                 
                 const response = await axios.patch('/api/post', requestData);
                 console.log(response.data)
-                // console.log(requestData)
     
                 // Exit the editing mode
                 setPost(updatedPost)
@@ -108,10 +107,13 @@ export default function PostPage(){
                     object.authorName = commentData.fname + " " + commentData.lname;
                 }
 
+                const date = new Date(responseData.createdAt);
+                const formattedDate = date.toLocaleString();
+
                 const postDetails = {
                     aId: responseData.author,
                     author: userData.fname + " " + userData.lname,
-                    createdAt: responseData.createdAt,
+                    createdAt: formattedDate,
                     content: responseData.content,
                     likes: responseData.likes.length,
                     comments: responseData.comments
