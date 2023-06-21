@@ -10,10 +10,23 @@ export default function NavBar({uId}) {
     const [searchQuery, setSearchQuery] = useState('');
     const [searchResults, setSearchResults] = useState([]);
 
+
     const handleSearch = async () => {
         try {
             const response = await axios.get(`/api/user/${uId}/search?search=${searchQuery}`);
             const searchData = response.data.users;
+            console.log(searchData)
+            
+            const userResponse1 = await axios.get(`api/user/${uId}/friends`)
+            const userResponse2 = await axios.get(`api/user/${uId}/requests`)
+            const userFriends = userResponse1.data.friends;
+            const userFriendRequests = userResponse2.data.friends;
+
+            for (const user of searchData){
+                user.isAFriend = false
+                if (userFriends.includes(user._id) || userFriendRequests.includes(user._id))
+                    user.isAFriend = true
+            }
             console.log(searchData)
             setSearchResults(searchData);
         } catch (error) {
@@ -54,9 +67,11 @@ export default function NavBar({uId}) {
                                         <p>{user.fname} {user.lname}</p>
                                         <p>{user.email}</p>
                                     </div>
-                                    <button className='btn btn-primary btn-outline'>
-                                        <BsPersonAdd className='text-4xl'/>
-                                    </button>
+                                    {!user.isAFriend && (
+                                        <button className='btn btn-primary btn-outline'>
+                                            <BsPersonAdd className='text-4xl'/>
+                                        </button>
+                                    )}
                                 </a></li>
                             ))}
                         </div>

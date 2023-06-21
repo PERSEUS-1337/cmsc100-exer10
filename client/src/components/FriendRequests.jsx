@@ -11,17 +11,21 @@ export default function FriendRequests({uId}) {
                 const response = await axios.get(`/api/user/${uId}/requests`); 
                 const requestIdList = await response.data.requests;
                 const requestList = [];
-                for (const requestId of requestIdList) {
-                    const requestResponse = await axios.get(`/api/user/${requestId._id}`);
-                    const requestData = {
-                        fname: requestResponse.data.user.fname,
-                        lname: requestResponse.data.user.lname,
-                        email: requestResponse.data.user.email,
-                        fId: requestResponse.data.user._id,
+                if (requestIdList){
+                    for (const requestId of requestIdList) {
+                        const requestResponse = await axios.get(`/api/user/${requestId._id}`);
+                        const requestData = {
+                            fname: requestResponse.data.user.fname,
+                            lname: requestResponse.data.user.lname,
+                            email: requestResponse.data.user.email,
+                            fId: requestResponse.data.user._id,
+                            status: requestId.status
+                        }
+                        requestList.push(requestData);
                     }
-                    requestList.push(requestData);
+                    console.log(requestList)
+                    setRequests(requestList)
                 }
-                setRequests(requestList)
             } catch (error) {
                 console.error('Error fetching friend requests:', error);
             }
@@ -38,7 +42,6 @@ export default function FriendRequests({uId}) {
                 "fId": fId
             }
             const response = await axios.post('/api/user/request', data);
-            console.info(response.data)
             const updatedFriends = requests.filter((request) => request.fId !== fId);
             setRequests(updatedFriends);
             handleRefresh();
@@ -55,10 +58,8 @@ export default function FriendRequests({uId}) {
                 "fId": fId
             }
             const response = await axios.delete('/api/user/request', {data: data});
-            console.info(response.data)
             const updatedFriends = requests.filter((request) => request.fId !== fId);
             setRequests(updatedFriends);
-            handleRefresh();
         } catch (error) {
             console.log(error)
         }
@@ -81,9 +82,16 @@ export default function FriendRequests({uId}) {
                 <h3 className='text-xl text-gray-500'>{request.email}</h3>
             </div>
             {/* Button */}
-            <button className='btn btn-outline btn-success' onClick={() => acceptFriend(request.fId)}>
-                Accept
-            </button>
+            {/* {request.status === 'received' && (
+            )} */}
+            {request.status === 'received' ? (
+                <button className='btn btn-outline btn-success' onClick={() => acceptFriend(request.fId)}>
+                    Accept
+                </button>
+                
+            ) : (
+                <p>Request Sent!</p>
+            )}
             <button className='btn btn-outline btn-error' onClick={() => rejectFriend(request.fId)}>
                 Remove
             </button>

@@ -111,7 +111,6 @@ async function searchUsers(req, res) {
 // }
 
 
-
 async function getFriendsList (req, res) {
     const {uId} = req.params;
     try {
@@ -128,7 +127,8 @@ async function getFriendsList (req, res) {
         const friendsList = user.friends;
 
         if (!friendsList || friendsList.length === 0)
-            throw {code: 404, msg: api.NOT_FOUND_FRIEND};
+            // throw {code: 404, msg: api.NOT_FOUND_FRIEND};
+            return res.status(200).json({msg: api.NOT_FOUND_FRIEND, friends: friendsList});
         
         console.info(api.SUCCESS_FRIEND_FETCHED);
         return res.status(200).json({msg: api.SUCCESS_FRIEND_FETCHED, friends: friendsList});
@@ -152,7 +152,8 @@ async function getFriendRequests(req, res) {
         const requestList = user.friend_request;
 
         if (!requestList || requestList.length === 0)
-            throw {code: 404, msg: api.NOT_FOUND_FRIEND_REQUEST};
+            // throw {code: 404, msg: api.NOT_FOUND_FRIEND_REQUEST};
+            return res.status(200).json({msg: api.ERROR_FETCHING_FRIEND_REQUEST, friends: requestList});
         
         console.info(api.SUCCESS_FRIEND_REQUEST_FETCHED);
         return res.status(200).json({msg: api.SUCCESS_FRIEND_REQUEST_FETCHED, requests: requestList});
