@@ -63,7 +63,8 @@ async function searchUsers(req, res) {
             }).select('fname lname email');
 
         if (users.length === 0)
-            throw { code: 404, msg: api.NOT_FOUND_USER };
+            // throw { code: 404, msg: api.NOT_FOUND_USER };
+            return res.status(200).json({ msg: api.ERROR_FETCHING_USER, users });
 
         console.info(api.SUCCESS_USER_FETCHED);
         return res.status(200).json({ msg: api.SUCCESS_USER_FETCHED, users });
