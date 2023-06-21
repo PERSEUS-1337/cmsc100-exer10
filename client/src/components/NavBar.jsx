@@ -10,7 +10,6 @@ export default function NavBar({uId}) {
     const [searchQuery, setSearchQuery] = useState('');
     const [searchResults, setSearchResults] = useState([]);
 
-
     const handleSearch = async () => {
         try {
             const response = await axios.get(`/api/user/${uId}/search?search=${searchQuery}`);
@@ -24,13 +23,33 @@ export default function NavBar({uId}) {
 
             for (const user of searchData){
                 user.isAFriend = false
-                if (userFriends.includes(user._id) || userFriendRequests.includes(user._id))
-                    user.isAFriend = true
+                if (userFriends)
+                    if (userFriends.includes(user._id))
+                        user.isAFriend = true
+
+                if (userFriendRequests)
+                    if (userFriendRequests.includes(user._id))
+                        user.isAFriend = true
             }
             console.log(searchData)
             setSearchResults(searchData);
         } catch (error) {
             console.error('Error searching users:', error);
+        }
+    };
+
+    const sendFriendRequest = async (fId) => {
+        try {
+            // Send a friend request to the user with the specified userId
+            const data = {
+                "uId": uId,
+                "fId": fId
+            }
+            const response = await axios.post(`/api/user/friend`, data);
+            const responseData = response.data;
+            console.log(responseData);
+        } catch (error) {
+            console.error('Error sending friend request:', error);
         }
     };
 
@@ -64,11 +83,12 @@ export default function NavBar({uId}) {
                             {searchResults.map((user) => (
                                 <li key={user._id}><a>
                                     <div key={user._id} className="px-4 py-2">
-                                        <p>{user.fname} {user.lname}</p>
+                                        <p className='text-2xl text-black'>{user.fname} {user.lname}</p>
                                         <p>{user.email}</p>
                                     </div>
+                                    {/* Send Friend Request button */}
                                     {!user.isAFriend && (
-                                        <button className='btn btn-primary btn-outline'>
+                                        <button className='btn btn-primary btn-outline' onClick={() => sendFriendRequest(user._id)}>
                                             <BsPersonAdd className='text-4xl'/>
                                         </button>
                                     )}
