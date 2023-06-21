@@ -138,6 +138,7 @@ async function createPost (req, res) {
 
 async function addComment (req, res) {
   const {uId, pId, text} = req.body;
+  console.log(uId, pId, text)
   try {
     
     if (!validator.default.isMongoId(uId) || !validator.default.isMongoId(pId))

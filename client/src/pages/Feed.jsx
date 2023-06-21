@@ -23,6 +23,7 @@ export default function FeedPage() {
                 <div className='flex-col w-full h-full '>
                     <CreatePost
                         uId={uId}
+                        message="What's on your mind"
                     />
                     <FeedList 
                         uId={uId}

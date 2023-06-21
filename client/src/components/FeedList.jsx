@@ -100,7 +100,6 @@ export default function FeedList({uId}) {
     return(
         <div className='space-y-4'>
             {feed.map((feed) => (
-            <Link to={{ pathname: `/feed/${feed.pId}`, state: { body: uId } }} key={feed.pId}>
                 <div className='flex ' key={feed.pId}>
                     {/* Interaction Column */}
                     <div className='flex-col'>
@@ -114,7 +113,9 @@ export default function FeedList({uId}) {
                                 {feed.likes}
                             </p>
                         </div>
-                        <BiCommentDetail className='text-4xl text-neutral'/>
+                        <Link to={{ pathname: `/feed/${feed.pId}`, state: { body: uId } }} key={feed.pId}>
+                            <BiCommentDetail className='text-4xl text-neutral'/>
+                        </Link>
                     </div>
                     {/* Post Details */}
                     <div className='flex-col '>
@@ -138,7 +139,7 @@ export default function FeedList({uId}) {
                         </div>
                     </div>
                 </div>
-                </Link>
+
             ))}
         </div>
     );
