@@ -15,52 +15,8 @@ export default function PostPage(){
     const { pId } = useParams();
     
     const [feed, setPost] = useState([]);
-    // const [likedPosts, setLikedPosts] = useState([]);
     const [isEditing, setIsEditing] = useState(false);
     const [editedContent, setEditedContent] = useState(feed.content);
-
-    // const handleToggleLike = async () => {
-    //     try {
-    //         const requestData = {
-    //             uId: uId,
-    //             pId: pId
-    //         };
-
-    //         // TODO: Show modal alert if success or not
-    //         const response = await axios.patch('/api/post/like', requestData);
-    //         // const updatedPost = response.data.post;
-            
-    //         // For state management whether its liked by user or not
-    //         const isLiked = likedPosts.includes(pId);
-
-    //         // if (isLiked) {
-    //         //     // Unlike the post
-    //         //     const updatedLikedPosts = likedPosts.filter((postId) => postId !== pId);
-    //         //     setLikedPosts(updatedLikedPosts);
-    //         // } else {
-    //         //     // Like the post
-    //         //     const updatedLikedPosts = [...likedPosts, pId];
-    //         //     setLikedPosts(updatedLikedPosts);
-    //         // }
-    //         if (feed.liked) {
-    //             // Unlike the post
-    //             setPost((prevPost) => ({
-    //                 ...prevPost,
-    //                 liked: false,
-    //                 likes: prevPost.likes - 1,
-    //             }));
-    //         } else {
-    //             // Like the post
-    //             setPost((prevPost) => ({
-    //                 ...prevPost,
-    //                 liked: true,
-    //                 likes: prevPost.likes + 1,
-    //             }));
-    //         }
-    //     } catch (error) {
-    //         console.error('Error toggling like:', error);
-    //     }
-    // };
 
     const handleRemovePost = async () => {
         try {
@@ -150,34 +106,19 @@ export default function PostPage(){
             <div className='flex ' key={feed.pId}>
                 {/* Interaction Column */}
                 <div className='flex-col'>
-                    {/* <div>
-                        <label className='swap'>
-                            <input
-                                type="checkbox"
-                                checked={feed?.liked}
-                                onChange={handleToggleLike}
-                            />
-                            <AiOutlineLike className='swap-on text-4xl text-accent'/>
-                            <AiOutlineLike className='swap-off text-4xl text-neutral'/>
-                        </label>
-                        <p>
-                            {feed.likes}
-                        </p>
-                    </div> */}
                     <Link to='/feed'>
-                        <button className='btn'>
-
-                            <AiOutlineArrowLeft className='text-4xl text-neutral'/>
+                        <button className='btn btn-outline btn-neutral'>
+                            <AiOutlineArrowLeft className='text-4xl'/>
                         </button>
                     </Link>
                     {/* Remove Button */}
                     {feed.aId === uId && (
-                        <div>
-                            <MdOutlineDeleteOutline className='text-4xl text-error' onClick={handleRemovePost}/>
-                            {/* <button className='btn btn-primary' onClick={() => setIsEditing(!isEditing)}>
-                                {isEditing ? 'Save' : 'Edit'}
-                            </button> */}
-                            <button className='btn btn-primary' onClick={() => {
+                        <div className='flex border-4'>
+                            <button className='btn btn-outline btn-error' onClick={handleRemovePost}>
+
+                                <MdOutlineDeleteOutline className='text-4xl' />
+                            </button>
+                            <button className='btn btn-outline btn-primary' onClick={() => {
                                 if (isEditing) {
                                     handleSaveContent(feed.aId);
                                 }
@@ -212,10 +153,9 @@ export default function PostPage(){
                             placeholder={feed.content}
                             />
                         ) : (
-                            <p>{feed.content}</p>
+                            <p className='text-3xl'>{feed.content}</p>
                         )}
                     </div>
-
                     {/* Comments */}
                     <div>
                         <CommentsList
