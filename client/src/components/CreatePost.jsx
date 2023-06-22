@@ -64,7 +64,7 @@ export default function CreatePost({uId}) {
             </div>
             {isAlertVisible && (
                 <label className="label">
-                    <span className="label-text text-secondary">{alertMessage}</span>
+                    <span className="label-text text-success">{alertMessage}</span>
                 </label>
             )}
         </div>

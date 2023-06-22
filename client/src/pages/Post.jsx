@@ -27,9 +27,14 @@ export default function PostPage(){
 
             // TODO: Show modal alert if success or not
             const response = await axios.delete('/api/post', {data: requestData});
+            handleRefresh();
         } catch (error) {
             console.error('Error toggling like:', error);
         }
+    };
+
+    const handleRefresh = () => {
+        window.location.reload();
     };
 
     const handleSaveContent = async () => {
@@ -78,6 +83,8 @@ export default function PostPage(){
             const date = new Date(responseData.createdAt);
             const formattedDate = date.toLocaleString();
 
+            responseData.comments.reverse();
+
             const postDetails = {
                 aId: responseData.author,
                 author: userData.fname + " " + userData.lname,
@@ -102,19 +109,22 @@ export default function PostPage(){
             <NavBar 
                 uId={uId}
             />
-            <div className='flex bg-white my-4 rounded-box p-4' key={feed.pId}>
+            <div className='flex bg-white my-4 rounded-box p-4 w-2/3' key={feed.pId}>
                 {/* Interaction Column */}
                 <div className='flex-col space-y-4 items-center px-4'>
-                    <Link to='/feed'>
-                        <button className='btn btn-square btn-sm btn-neutral'>
+                    <button className='btn btn-square btn-sm btn-neutral'>
+                        <Link to='/feed'>
                             <AiOutlineArrowLeft className='text-2xl'/>
-                        </button>
-                    </Link>
+                        </Link>
+                    </button>
                     {/* Remove Button */}
                     {feed.aId === uId && (
                         <div className='flex-col w-min h-min space-y-2 items-center justify-between'>
                             <button className='btn btn-sm btn-square btn-outline btn-error' onClick={handleRemovePost}>
-                                <MdOutlineDeleteOutline className='text-2xl' />
+                                <Link to='/feed'>
+
+                                    <MdOutlineDeleteOutline className='text-2xl' />
+                                </Link>
                             </button>
                             <button className='btn btn-sm btn-square btn-accent btn-outline' onClick={() => {
                                 if (isEditing) {
@@ -132,7 +142,7 @@ export default function PostPage(){
                     {/* Post Author */}
                     <div className='flex '>
                         <div className='flex-col'>
-                            <h1 className='text-3xl text-neutral'>
+                            <h1 className='text-3xl text-neutral font-bold'>
                                 {feed.author}
                             </h1>
                             <p className='text-sm italic text-slate-400'>
@@ -141,18 +151,16 @@ export default function PostPage(){
                         </div>
                     </div>
                     {/* Post Content */}
-                    <div>
                         {isEditing ? (
                             <textarea
                                 value={editedContent}
                                 onChange={(e) => setEditedContent(e.target.value)}
-                                className="textarea textarea-accent w-full max-w-x my-2"
+                                className="textarea textarea-accent w-full my-2"
                                 placeholder={feed.content}
                             />
                         ) : (
-                            <p className='text-2xl'>{feed.content}</p>
+                            <p className='text-xl'>{feed.content}</p>
                         )}
-                    </div>
                     {/* Comments */}
                     <div>
                         <CommentsList

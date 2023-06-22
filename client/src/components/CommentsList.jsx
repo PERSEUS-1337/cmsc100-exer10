@@ -50,37 +50,40 @@ export default function CommentsList({uId, comments}) {
     };
 
     return(
-        <div>
-            <div className='flex-col'>
-            {isAlertVisible && (
-                <div className="alert alert-success">
-                    <span>
-                        {alertMessage}
-                    </span>
-                </div>
-            )}
-            <div className="border-b-2 border-gray-400"/>
-                <div className='flex justify-between'>
-
-                    <div className="form-control w-full max-w-xs">
-                        <label className="label">
-                            <span className="label-text">Write a comment</span>
-                        </label>
+        <div className='flex-col'>
+            <div className='flex justify-between'>
+                <div className=" w-full max-w-xs bg-slate-50 my-2 rounded-box p-2">
+                    <label className="label">
+                        <span className="label-text-alt">Write a comment</span>
+                    </label>
+                    <div className='flex gap-4'>
                         <input type="text" placeholder="Type here" value={comment} onChange={(e) => setComment(e.target.value)} className="input input-bordered w-full max-w-xs" />
+                        <button onClick={handleCommentCreate}>
+                            <AiOutlineSend className='text-4xl text-primary' />
+                        </button>
                     </div>
-                    <button onClick={handleCommentCreate}>
-                        <AiOutlineSend className='text-4xl text-primary' />
-                    </button>
                 </div>
             </div>
-            
-            {comments?.map((comment) => (
-                <div key={comment._id}>
-                    <h1 className='text-4xl'>{comment.authorName}</h1>
-                    <p>{comment.text}</p>
-                    <p>{comment.createdAt}</p>
+            {isAlertVisible && (
+                <label className="label">
+                    <span className="label-text text-success">{alertMessage}</span>
+                </label>
+            )}
+            <div className='flex-col'>
+                <label className="label">
+                    <span className="label-text text-lg text-black">Comments</span>
+                </label>
+                <div className="border-b-2 border-gray-400"/>
+                <div className='flex-col p-4 space-y-4'>
+                    {comments?.map((comment) => (
+                        <div key={comment._id} className=''>
+                            <h1 className='text-xl text-primary'>{comment.authorName}</h1>
+                            <p className='text-md'>{comment.text}</p>
+                            <p className='text-xs text-right text-slate-400 italic'>{comment.createdAt}</p>
+                        </div>
+                    ))}
                 </div>
-            ))}
+            </div>
         </div>
     );
 }
