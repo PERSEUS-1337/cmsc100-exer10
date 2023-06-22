@@ -128,15 +128,14 @@ export default function PostPage(){
                     )}
                 </div>
                 {/* Post Details */}
-                <div className='flex-col '>
+                <div className='flex-col space-y-4'>
                     {/* Post Author */}
                     <div className='flex '>
-                        <BiFace className='text-6xl text-neutral' />
                         <div className='flex-col'>
-                            <h1 className='text-4xl'>
+                            <h1 className='text-3xl text-neutral'>
                                 {feed.author}
                             </h1>
-                            <p>
+                            <p className='text-sm italic text-slate-400'>
                                 {feed.createdAt}
                             </p>
                         </div>
@@ -145,13 +144,13 @@ export default function PostPage(){
                     <div>
                         {isEditing ? (
                             <textarea
-                            value={editedContent}
-                            onChange={(e) => setEditedContent(e.target.value)}
-                            className="textarea"
-                            placeholder={feed.content}
+                                value={editedContent}
+                                onChange={(e) => setEditedContent(e.target.value)}
+                                className="textarea textarea-accent w-full max-w-x my-2"
+                                placeholder={feed.content}
                             />
                         ) : (
-                            <p className='text-3xl'>{feed.content}</p>
+                            <p className='text-2xl'>{feed.content}</p>
                         )}
                     </div>
                     {/* Comments */}
