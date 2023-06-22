@@ -60,7 +60,7 @@ export default function NavBar({uId}) {
     };
 
     return(
-        <div className=" navbar bg-white rounded-box h-20 flex gap-4">
+        <div className=" navbar bg-white rounded-box h-20 flex gap-4 p-4">
             {/* Logo */}
             <Link to='/'>
                 <div className='flex text-neutral normal-case'>

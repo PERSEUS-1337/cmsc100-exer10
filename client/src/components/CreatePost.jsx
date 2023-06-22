@@ -1,7 +1,7 @@
 import axios from 'axios';
 import React, { useState } from 'react';
 
-import { BiFace, BiEdit } from 'react-icons/bi';
+import { BiEdit } from 'react-icons/bi';
 
 export default function CreatePost({uId}) {
     const [postContent, setPostContent] = useState('');
@@ -44,29 +44,35 @@ export default function CreatePost({uId}) {
     };
 
     return(
-        <div className='flex-col'>
-            {isAlertVisible && (
+        <div className='flex-col bg-white rounded-box p-4'>
+            {/* {isAlertVisible && (
                 <div className="alert">
                     {alertMessage}
                     <button onClick={() => setIsAlertVisible(false)}>Close</button>
                 </div>
-            )}
-            <h1>
-                Post Something
-            </h1>
-            <div className="border-b-2 border-gray-400"/>
-            <div className='flex justify-between'>
-                <BiFace className='text-6xl text-neutral' />
+            )} */}
+            <div>
+                <label className="label">
+                    <span className="label-text text-neutral text-2xl">Post Something</span>
+                </label>
+                <div className="border-b-2 border-gray-400 "/>
+            </div>
+            <div className='flex justify-between items-center gap-4'> 
                 <textarea 
-                className="textarea textarea-ghost"
-                placeholder="What's on your mind?"
-                value={postContent}
-                onChange={(e) => setPostContent(e.target.value)}
+                    className="textarea textarea-accent w-full max-w-x my-2"
+                    placeholder="What's on your mind?"
+                    value={postContent}
+                    onChange={(e) => setPostContent(e.target.value)}
                 />
-                <button onClick={handlePostCreate}>
-                    <BiEdit className='text-6xl text-primary' />
+                <button className='btn btn-circle btn-outline btn-primary btn-md' onClick={handlePostCreate}>
+                    <BiEdit className='text-4xl' />
                 </button>
             </div>
+            {isAlertVisible && (
+                <label className="label">
+                    <span className="label-text text-secondary">{alertMessage}</span>
+                </label>
+            )}
         </div>
     );
 }
