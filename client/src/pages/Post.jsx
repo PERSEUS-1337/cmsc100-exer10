@@ -1,16 +1,17 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
 
-import { BiFace, BiEdit } from 'react-icons/bi';
-import { AiOutlineLike, AiOutlineArrowLeft } from 'react-icons/ai'
+import { AiOutlineArrowLeft } from 'react-icons/ai'
 import { MdOutlineDeleteOutline, MdOutlineCreate, MdOutlineSave } from 'react-icons/md'
 
 import NavBar from '../components/NavBar';
 import CommentsList from '../components/CommentsList';
 
 export default function PostPage(){
+    const navigate = useNavigate();
+
     const uId = sessionStorage.getItem('uId');
     const { pId } = useParams();
     
@@ -26,15 +27,12 @@ export default function PostPage(){
             };
 
             // TODO: Show modal alert if success or not
-            const response = await axios.delete('/api/post', {data: requestData});
-            handleRefresh();
+            await axios.delete('/api/post', {data: requestData});
+            navigate('/feed')
+            // handleRefresh();
         } catch (error) {
             console.error('Error toggling like:', error);
         }
-    };
-
-    const handleRefresh = () => {
-        window.location.reload();
     };
 
     const handleSaveContent = async () => {
@@ -51,7 +49,7 @@ export default function PostPage(){
                 var updatedPost = feed;
                 updatedPost.content = editedContent
                 
-                const response = await axios.patch('/api/post', requestData);
+                await axios.patch('/api/post', requestData);
     
                 // Exit the editing mode
                 setPost(updatedPost)
@@ -64,6 +62,13 @@ export default function PostPage(){
 
         }
     };
+
+    const isAuthenticated = async () => {
+        // Set the default header for all requests
+        axios.defaults.headers.common['Authorization'] = `Bearer ${sessionStorage.getItem('jwtToken')}`;
+        if (!sessionStorage.getItem('jwtToken'))
+            navigate('/')
+    }
 
     const fetchPost = async () => {
         try {
@@ -78,12 +83,16 @@ export default function PostPage(){
                 const commentResponse = await axios.get(`/api/user/${object.author}`);
                 const commentData = commentResponse.data.user;
                 object.authorName = commentData.fname + " " + commentData.lname;
+                const date = new Date(object.createdAt);
+                const formattedDate = date.toLocaleString();
+                object.createdAt = formattedDate
             }
 
             const date = new Date(responseData.createdAt);
             const formattedDate = date.toLocaleString();
 
             responseData.comments.reverse();
+
 
             const postDetails = {
                 aId: responseData.author,
@@ -102,6 +111,7 @@ export default function PostPage(){
     
     useEffect(() => {
         fetchPost();
+        isAuthenticated();
     }, [pId]);
     
     return(
@@ -112,19 +122,16 @@ export default function PostPage(){
             <div className='flex bg-white my-4 rounded-box p-4 w-2/3' key={feed.pId}>
                 {/* Interaction Column */}
                 <div className='flex-col space-y-4 items-center px-4'>
-                    <button className='btn btn-square btn-sm btn-neutral'>
-                        <Link to='/feed'>
+                    <button className='btn btn-square btn-sm btn-neutral' onClick={() => navigate('/feed')}>
                             <AiOutlineArrowLeft className='text-2xl'/>
-                        </Link>
                     </button>
                     {/* Remove Button */}
                     {feed.aId === uId && (
                         <div className='flex-col w-min h-min space-y-2 items-center justify-between'>
                             <button className='btn btn-sm btn-square btn-outline btn-error' onClick={handleRemovePost}>
-                                <Link to='/feed'>
-
+                                {/* <Link to='/feed'> */}
                                     <MdOutlineDeleteOutline className='text-2xl' />
-                                </Link>
+                                {/* </Link> */}
                             </button>
                             <button className='btn btn-sm btn-square btn-accent btn-outline' onClick={() => {
                                 if (isEditing) {

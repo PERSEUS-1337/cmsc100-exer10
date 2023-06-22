@@ -1,15 +1,23 @@
 import { useForm } from "react-hook-form";
+import { useNavigate } from "react-router-dom";
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
-import React, { useState } from 'react';
+import NavBar from '../components/NavBar';
 
 export default function LoginPage() {
-    const { register, handleSubmit, formState: {errors, isDirty } } = useForm();
+    const navigate = useNavigate();
+    const auth = sessionStorage.getItem('jwtToken')
 
+    const isAuthenticated = async () => {
+        if (auth)
+            navigate('/feed')
+    }
+
+    const { register, handleSubmit, formState: {errors, isDirty }, trigger } = useForm();
     const [alertMessage, setAlertMessage] = useState('');
     const [isAlertVisible, setIsAlertVisible] = useState(false);
 
-        
     const onSubmit = async (data) => {
         try {
             const response = await axios.post('/api/auth/login', data);
@@ -17,18 +25,30 @@ export default function LoginPage() {
             sessionStorage.clear();
             sessionStorage.setItem('jwtToken', response.data.token);
             sessionStorage.setItem('uId', response.data._id);
+
+            // Set the default header for all requests
+            axios.defaults.headers.common['Authorization'] = `Bearer ${sessionStorage.getItem('jwtToken')}`;
+            
+            // Redirect to the /feed page
             setIsAlertVisible(true);
+            navigate("/feed");
         } catch (error) {
             console.error(error);
             setAlertMessage('Error: ' + error.response.data.err);
             setIsAlertVisible(true);
         }
     };
+
     // Else, window does not refresh
     const onError = (errors, e) => console.log(errors, e);
 
+    useEffect(() => {
+        isAuthenticated();
+    }, []);
+
     return(
         <div className=' form-control flex-col gap-5 px-20 xl:px-40 w-full h-screen justify-center bg-neutral text-white font-poppins'>
+            <NavBar/>
             <p className=' text-5xl font-bold text-center'>Login Page</p>
             <form onSubmit={handleSubmit(onSubmit, onError)}>
                 <div className=''>
@@ -42,7 +62,7 @@ export default function LoginPage() {
                             { 
                                 required: "This is required", 
                                 pattern: {
-                                    value: /^[\w-]+@([\w-]+\.)+[\w-]{2,4}$/,
+                                    value: /.+@.+\..+/,
                                     message:"The email format is incorrect"
                                 },
                                 minLength: {
@@ -67,22 +87,25 @@ export default function LoginPage() {
                                         "password", 
                                         { 
                                             required: "This is required", 
-                                            // pattern: {
-                                            //     value: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/,
-                                            //     message:"*Must be at least 8 characters, 1 number, 1  lowercase letter, and 1 uppercase letter"
-                                            // },
+                                            pattern: {
+                                                value: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/,
+                                                message:"*Must be at least 8 characters, 1 number, 1  lowercase letter, and 1 uppercase letter"
+                                            },
                                             minLength: {
-                                                value: 8,
+                                                value: 7,
                                                 message: "Min length is 8"
                                             }
                                         }
                                     )}
-                                    // onChange={() => trigger("password")}
-                                    
                                 />
                                 <label className="label">
                                     <span className="label-text-alt text-warning">{errors.password?.message}</span>
                                 </label>
+                                {isAlertVisible && (
+                                    <label className="label">
+                                        <span className="label-text text-info">{alertMessage}</span>
+                                    </label>
+                                )}
                             </div>
                         </div>
                     </div>
@@ -99,12 +122,6 @@ export default function LoginPage() {
                 </div>
                 <p className='text-sm text-center text-gray-700 py-4'>© 2023 All Rights Reserved</p>
             </form>
-            {isAlertVisible && (
-                <div className="alert">
-                    {alertMessage}
-                    <button onClick={() => setIsAlertVisible(false)}>Close</button>
-                </div>
-            )}
         </div>
     )
 }

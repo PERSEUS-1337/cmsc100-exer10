@@ -2,7 +2,6 @@ import axios from 'axios';
 import React, { useState } from 'react';
 import { useParams } from 'react-router-dom';
 
-import { BiFace, BiEdit } from 'react-icons/bi';
 import { AiOutlineSend } from 'react-icons/ai';
 
 export default function CommentsList({uId, comments}) {
@@ -19,8 +18,6 @@ export default function CommentsList({uId, comments}) {
                 console.log('Comment is empty');
                 return;
             }
-
-            console.log(pId)
 
             const postData = {
                 uId: uId,
@@ -59,7 +56,7 @@ export default function CommentsList({uId, comments}) {
                     <div className='flex gap-4'>
                         <input type="text" placeholder="Type here" value={comment} onChange={(e) => setComment(e.target.value)} className="input input-bordered w-full max-w-xs" />
                         <button onClick={handleCommentCreate}>
-                            <AiOutlineSend className='text-4xl text-primary' />
+                            <AiOutlineSend className='text-3xl text-primary' />
                         </button>
                     </div>
                 </div>
@@ -75,13 +72,18 @@ export default function CommentsList({uId, comments}) {
                 </label>
                 <div className="border-b-2 border-gray-400"/>
                 <div className='flex-col p-4 space-y-4'>
-                    {comments?.map((comment) => (
+                    {comments?.length > 0 ? (comments?.map((comment) => (
                         <div key={comment._id} className=''>
                             <h1 className='text-xl text-primary'>{comment.authorName}</h1>
                             <p className='text-md'>{comment.text}</p>
                             <p className='text-xs text-right text-slate-400 italic'>{comment.createdAt}</p>
                         </div>
-                    ))}
+                    ))): (
+                        <div className='flex items-center gap-4'>
+                            <span className="loading loading-ring loading-xs"></span>
+                            <div className="text-center text-slate-500">No comments yet</div>
+                        </div> 
+                    )}
                 </div>
             </div>
         </div>

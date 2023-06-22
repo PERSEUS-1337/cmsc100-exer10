@@ -1,14 +1,23 @@
 import { useForm } from "react-hook-form";
 import axios from 'axios';
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom'
 
-import React, { useState } from 'react';
+import NavBar from '../components/NavBar';
 
 export default function SignupPage() {
+    const navigate = useNavigate();
+
     const { register, handleSubmit,watch, formState: {errors, isDirty }, trigger } = useForm();
     const password = watch("password");
 
     const [alertMessage, setAlertMessage] = useState('');
     const [isAlertVisible, setIsAlertVisible] = useState(false);
+
+    const isAuthenticated = async () => {
+        if (sessionStorage.getItem('jwtToken'))
+            navigate('/feed')
+    }
         
     const onSubmit = async (data) => {
         try {
@@ -18,18 +27,30 @@ export default function SignupPage() {
             setAlertMessage('Success! ' + response.data.msg);
             sessionStorage.clear();
             sessionStorage.setItem('jwtToken', response.data.token);
+            sessionStorage.setItem('uId', response.data.uId);
             setIsAlertVisible(true);
+            navigate("/feed")
+            handleRefresh();
         } catch (error) {
             console.error(error);
             setAlertMessage('Error: ' + error.response.data.err);
             setIsAlertVisible(true);
         }
     };
+
+    const handleRefresh = () => {
+        window.location.reload();
+    };
     // Else, window does not refresh
     const onError = (errors, e) => console.log(errors, e);
 
+    useEffect(() => {
+        isAuthenticated();
+    }, []);
+
     return(
         <div className=' form-control flex-col gap-5 px-20 xl:px-40 w-full h-screen justify-center bg-neutral text-white font-poppins'>
+            <NavBar/>
             <p className=' text-5xl font-bold text-center'>Sign-up Page</p>
             <form onSubmit={handleSubmit(onSubmit, onError, (data) => {
                 // console.log(data)
@@ -85,7 +106,7 @@ export default function SignupPage() {
                             { 
                                 required: "This is required", 
                                 pattern: {
-                                    value: /^[\w-]+@([\w-]+\.)+[\w-]{2,4}$/,
+                                    value: /.+@.+\..+/,
                                     message:"The email format is incorrect"
                                 },
                                 minLength: {
@@ -110,22 +131,25 @@ export default function SignupPage() {
                                         "password", 
                                         { 
                                             required: "This is required", 
-                                            // pattern: {
-                                            //     value: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/,
-                                            //     message:"*Must be at least 8 characters, 1 number, 1  lowercase letter, and 1 uppercase letter"
-                                            // },
+                                            pattern: {
+                                                value: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/,
+                                                message:"*Must be at least 8 characters, 1 number, 1  lowercase letter, and 1 uppercase letter"
+                                            },
                                             minLength: {
                                                 value: 8,
                                                 message: "Min length is 8"
                                             }
                                         }
                                     )}
-                                    // onChange={() => trigger("password")}
-                                    
                                 />
                                 <label className="label">
                                     <span className="label-text-alt text-warning">{errors.password?.message}</span>
                                 </label>
+                                {isAlertVisible && (
+                                    <label className="label">
+                                        <span className="label-text text-info">{alertMessage}</span>
+                                    </label>
+                                )}
                             </div>
                             <div className="w-1/2">
                                 <label className="label">

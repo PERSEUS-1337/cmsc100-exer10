@@ -1,8 +1,8 @@
 import axios from 'axios';
 import { useState, useEffect } from 'react';
 
-import { BiFace, BiSad } from 'react-icons/bi';
-import { RxCross2, RxPlus, RxPaperPlane } from 'react-icons/rx'
+import { BiSad } from 'react-icons/bi';
+import { RxCross2 } from 'react-icons/rx'
 
 export default function FriendsList({uId}) {
     const [friends, setFriends] = useState([]);

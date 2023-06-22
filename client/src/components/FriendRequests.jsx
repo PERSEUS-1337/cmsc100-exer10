@@ -1,8 +1,8 @@
 import axios from 'axios';
 import { useState, useEffect } from 'react';
 
-import { BiFace, BiSad } from 'react-icons/bi';
-import { RxCross2, RxPlus, RxPaperPlane } from 'react-icons/rx'
+import { BiSad } from 'react-icons/bi';
+import { RxCross2, RxPlus } from 'react-icons/rx'
 
 export default function FriendRequests({uId}) {
     const [requests, setRequests] = useState([]);
@@ -38,7 +38,7 @@ export default function FriendRequests({uId}) {
                 "uId": uId,
                 "fId": fId
             }
-            const response = await axios.post('/api/user/request', data);
+            await axios.post('/api/user/request', data);
             const updatedFriends = requests.filter((request) => request.fId !== fId);
             setRequests(updatedFriends);
             handleRefresh();
@@ -54,7 +54,7 @@ export default function FriendRequests({uId}) {
                 "uId": uId,
                 "fId": fId
             }
-            const response = await axios.delete('/api/user/request', {data: data});
+            await axios.delete('/api/user/request', {data: data});
             const updatedFriends = requests.filter((request) => request.fId !== fId);
             setRequests(updatedFriends);
         } catch (error) {
