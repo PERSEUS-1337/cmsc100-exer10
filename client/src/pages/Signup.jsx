@@ -106,7 +106,7 @@ export default function SignupPage() {
                             { 
                                 required: "This is required", 
                                 pattern: {
-                                    value: /^[\w-]+@([\w-]+\.)+[\w-]{2,4}$/,
+                                    value: /.+@.+\..+/,
                                     message:"The email format is incorrect"
                                 },
                                 minLength: {
@@ -141,7 +141,6 @@ export default function SignupPage() {
                                             }
                                         }
                                     )}
-                                    // onChange={() => trigger("password")}
                                 />
                                 <label className="label">
                                     <span className="label-text-alt text-warning">{errors.password?.message}</span>

@@ -62,7 +62,7 @@ export default function LoginPage() {
                             { 
                                 required: "This is required", 
                                 pattern: {
-                                    value: /^[\w-]+@([\w-]+\.)+[\w-]{2,4}$/,
+                                    value: /.+@.+\..+/,
                                     message:"The email format is incorrect"
                                 },
                                 minLength: {

@@ -83,12 +83,16 @@ export default function PostPage(){
                 const commentResponse = await axios.get(`/api/user/${object.author}`);
                 const commentData = commentResponse.data.user;
                 object.authorName = commentData.fname + " " + commentData.lname;
+                const date = new Date(object.createdAt);
+                const formattedDate = date.toLocaleString();
+                object.createdAt = formattedDate
             }
 
             const date = new Date(responseData.createdAt);
             const formattedDate = date.toLocaleString();
 
             responseData.comments.reverse();
+
 
             const postDetails = {
                 aId: responseData.author,
