@@ -8,7 +8,7 @@ export default function FeedPage() {
     const uId = sessionStorage.getItem('uId');
 
     return(
-        <div className="font-poppins bg-slate-400 sm:px-10 lg:px-40 py-4 h-max">
+        <div className="font-poppins bg-slate-400 sm:px-10 lg:px-96 py-4 h-max">
             {/* Navbar */}
             <NavBar
                 uId={uId}

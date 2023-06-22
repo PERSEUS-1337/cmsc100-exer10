@@ -45,12 +45,6 @@ export default function CreatePost({uId}) {
 
     return(
         <div className='flex-col bg-white rounded-box p-4'>
-            {/* {isAlertVisible && (
-                <div className="alert">
-                    {alertMessage}
-                    <button onClick={() => setIsAlertVisible(false)}>Close</button>
-                </div>
-            )} */}
             <div>
                 <label className="label">
                     <span className="label-text text-neutral text-2xl">Post Something</span>
