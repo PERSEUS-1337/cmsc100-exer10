@@ -162,6 +162,7 @@ export default function PostPage(){
                             <p className='text-xl'>{feed.content}</p>
                         )}
                     {/* Comments */}
+                    <div className="border-b-2 border-gray-400"/>
                     <div>
                         <CommentsList
                             uId={uId}
