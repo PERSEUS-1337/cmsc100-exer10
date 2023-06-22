@@ -146,7 +146,10 @@ export default function FeedList({uId}) {
                         </div>
                 </div>
             ))) : (
-                <div className="text-center text-slate-500">No posts yet</div>
+                <div className='flex items-center gap-4 justify-center'>
+                    <span className="loading loading-ring loading-xs"></span>
+                    <div className="text-center text-slate-500">No posts yet</div>
+                </div>
             )}
         </div>
     );

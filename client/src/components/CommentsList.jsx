@@ -79,7 +79,10 @@ export default function CommentsList({uId, comments}) {
                             <p className='text-xs text-right text-slate-400 italic'>{comment.createdAt}</p>
                         </div>
                     ))): (
-                       <div className="text-center text-slate-500">No comments yet</div> 
+                        <div className='flex items-center gap-4'>
+                            <span className="loading loading-ring loading-xs"></span>
+                            <div className="text-center text-slate-500">No comments yet</div>
+                        </div> 
                     )}
                 </div>
             </div>
