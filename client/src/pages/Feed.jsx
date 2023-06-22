@@ -20,7 +20,7 @@ export default function FeedPage() {
                     uId={uId}
                 />
                 {/* Feed Components */}
-                <div className='flex-col w-full h-full '>
+                <div className='flex-col w-full h-full space-y-4'>
                     <CreatePost
                         uId={uId}
                         message="What's on your mind"
