@@ -1,10 +1,9 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
+import { BrowserRouter as Router, Link } from 'react-router-dom';
 
-import { BiFace, BiEdit } from 'react-icons/bi';
-import { AiOutlineLike, AiOutlineArrowLeft } from 'react-icons/ai'
+import { AiOutlineArrowLeft } from 'react-icons/ai'
 import { MdOutlineDeleteOutline, MdOutlineCreate, MdOutlineSave } from 'react-icons/md'
 
 import NavBar from '../components/NavBar';
@@ -26,7 +25,7 @@ export default function PostPage(){
             };
 
             // TODO: Show modal alert if success or not
-            const response = await axios.delete('/api/post', {data: requestData});
+            await axios.delete('/api/post', {data: requestData});
             handleRefresh();
         } catch (error) {
             console.error('Error toggling like:', error);
@@ -51,7 +50,7 @@ export default function PostPage(){
                 var updatedPost = feed;
                 updatedPost.content = editedContent
                 
-                const response = await axios.patch('/api/post', requestData);
+                await axios.patch('/api/post', requestData);
     
                 // Exit the editing mode
                 setPost(updatedPost)

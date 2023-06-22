@@ -1,11 +1,8 @@
 import axios from 'axios';
-import React from 'react';
-import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
+import { BrowserRouter as Router, Link } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 
-import { BiFace } from 'react-icons/bi';
-import { MdTouchApp } from 'react-icons/md'
-import { AiOutlineLike } from 'react-icons/ai'
+import { AiOutlineLike } from 'react-icons/ai';
 
 export default function FeedList({uId}) {
     const [feed, setFeed] = useState([]);

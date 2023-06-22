@@ -1,9 +1,9 @@
 import { useState } from 'react';
 import axios from 'axios';
-import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
+import { BrowserRouter as Router, Link } from 'react-router-dom';
 
 import { GoGitMerge } from 'react-icons/go';
-import { BsSearch, BsPersonAdd, BsPersonCircle } from 'react-icons/bs';
+import { BsSearch, BsPersonAdd } from 'react-icons/bs';
 import { BiSad } from 'react-icons/bi'
 
 export default function NavBar({uId}) {
@@ -47,8 +47,7 @@ export default function NavBar({uId}) {
                 "uId": uId,
                 "fId": fId
             }
-            const response = await axios.post(`/api/user/friend`, data);
-            const responseData = response.data;
+            await axios.post(`/api/user/friend`, data);
             handleRefresh();
         } catch (error) {
             console.error('Error sending friend request:', error);

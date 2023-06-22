@@ -1,10 +1,8 @@
-import { BsPersonCircle } from 'react-icons/bs';
+import { useState, useEffect } from 'react';
+import axios from 'axios';
 
 import FriendsList from '../components/FriendsList';
 import FriendRequests from '../components/FriendRequests';
-
-import { useState, useEffect } from 'react';
-import axios from 'axios';
 
 export default function SideBar({uId}) {
 

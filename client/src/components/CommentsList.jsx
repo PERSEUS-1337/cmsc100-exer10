@@ -2,7 +2,6 @@ import axios from 'axios';
 import React, { useState } from 'react';
 import { useParams } from 'react-router-dom';
 
-import { BiFace, BiEdit } from 'react-icons/bi';
 import { AiOutlineSend } from 'react-icons/ai';
 
 export default function CommentsList({uId, comments}) {
@@ -19,8 +18,6 @@ export default function CommentsList({uId, comments}) {
                 console.log('Comment is empty');
                 return;
             }
-
-            console.log(pId)
 
             const postData = {
                 uId: uId,
