@@ -14,6 +14,9 @@ const {
     removeFriend
 } = require('../controllers/userController');
 
+const requireAuth = require('../middleware/requireAuth');
+router.use(requireAuth);
+
 // Sample API Call
 router.get('/', (req, res, next) => {res.json({msg: 'AUTHORIZED Hello World'});});
 

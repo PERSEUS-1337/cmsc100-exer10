@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import axios from 'axios';
-
 import { useNavigate } from 'react-router-dom'
 
 import { GoGitMerge } from 'react-icons/go';
@@ -69,55 +68,57 @@ export default function NavBar({uId}) {
                 <h1 className=' text-4xl'>BookFace</h1>
             </div>
             {/* Search Bar */}
-            <div className="flex gap-4">
-                <input
-                    type="text"
-                    placeholder="Search for a user"
-                    className="input input-primary "
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                />
-                {/* Search Results Dropdown */}
-                <div className="dropdown dropdown-bottom dropdown-end drop-shadow-2xl">
-                    <label tabIndex={0} className="btn btn-outline btn-primary btn-circle" onClick={handleSearch}>
-                        <BsSearch className='text-3xl'/>
-                    </label>
-                    <ul tabIndex={0} className="menu flex dropdown-content z-[1] bg-inherit rounded-box mt-4">
-                        <div className="flex-col bg-neutral rounded-lg w-max p-4 space-y-2">
-                            <div>
-                                <h1 className='text-xl text-secondary px-4'>Search Results</h1>
-                                <div className="border-b-2 border-gray-400 mx-4"/>
-                            </div> 
-                        {searchResults.length > 0 ? (
-                            <div>
-                                {searchResults.map((user) => (
-                                    <li key={user._id}><a className='hover:bg-slate-500 flex justify-between'>
-                                        {/* User Details */}
-                                        <div key={user._id} className="">
-                                            <p className='text-2xl font-bold text-secondary'>{user.fname} {user.lname}</p>
-                                            <p className='text-base-100'>{user.email}</p>
-                                        </div>
-                                        {/* Send Friend Request button */}
-                                        <div>
-                                            {!user.isAFriend && (
-                                                <button className='btn btn-md btn-accent btn-outline' onClick={() => sendFriendRequest(user._id)}>
-                                                    <BsPersonAdd className='text-4xl'/>
-                                                </button>
-                                            )}
-                                        </div>
-                                    </a></li>
-                                ))}
+            {uId && (
+                <div className="flex gap-4">
+                    <input
+                        type="text"
+                        placeholder="Search for a user"
+                        className="input input-primary "
+                        value={searchQuery}
+                        onChange={(e) => setSearchQuery(e.target.value)}
+                    />
+                    {/* Search Results Dropdown */}
+                    <div className="dropdown dropdown-bottom dropdown-end drop-shadow-2xl">
+                        <label tabIndex={0} className="btn btn-outline btn-primary btn-circle" onClick={handleSearch}>
+                            <BsSearch className='text-3xl'/>
+                        </label>
+                        <ul tabIndex={0} className="menu flex dropdown-content z-[1] bg-inherit rounded-box mt-4">
+                            <div className="flex-col bg-neutral rounded-lg w-max p-4 space-y-2">
+                                <div>
+                                    <h1 className='text-xl text-secondary px-4'>Search Results</h1>
+                                    <div className="border-b-2 border-gray-400 mx-4"/>
+                                </div> 
+                            {searchResults.length > 0 ? (
+                                <div>
+                                    {searchResults.map((user) => (
+                                        <li key={user._id}><a className='hover:bg-slate-500 flex justify-between'>
+                                            {/* User Details */}
+                                            <div key={user._id} className="">
+                                                <p className='text-2xl font-bold text-secondary'>{user.fname} {user.lname}</p>
+                                                <p className='text-base-100'>{user.email}</p>
+                                            </div>
+                                            {/* Send Friend Request button */}
+                                            <div>
+                                                {!user.isAFriend && (
+                                                    <button className='btn btn-md btn-accent btn-outline' onClick={() => sendFriendRequest(user._id)}>
+                                                        <BsPersonAdd className='text-4xl'/>
+                                                    </button>
+                                                )}
+                                            </div>
+                                        </a></li>
+                                    ))}
+                                </div>
+                            ):(
+                                <div className='flex text-2xl text-white items-center gap-x-4 bg-neutral rounded-lg w-max p-4 space-y-2'>
+                                    <BiSad className='text-4xl text-accent'/>
+                                    <h2>No users found...</h2>
+                                </div>
+                            )}
                             </div>
-                        ):(
-                            <div className='flex text-2xl text-white items-center gap-x-4 bg-neutral rounded-lg w-max p-4 space-y-2'>
-                                <BiSad className='text-4xl text-accent'/>
-                                <h2>No users found...</h2>
-                            </div>
-                        )}
-                        </div>
-                    </ul>
+                        </ul>
+                    </div>
                 </div>
-            </div>
+            )}
         </div>
     );
 }

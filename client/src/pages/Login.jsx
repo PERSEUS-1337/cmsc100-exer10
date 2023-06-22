@@ -1,17 +1,23 @@
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
+import NavBar from '../components/NavBar';
 
 export default function LoginPage() {
     const navigate = useNavigate();
+    const auth = sessionStorage.getItem('jwtToken')
+
+    const isAuthenticated = async () => {
+        if (auth)
+            navigate('/feed')
+    }
 
     const { register, handleSubmit, formState: {errors, isDirty } } = useForm();
     const [alertMessage, setAlertMessage] = useState('');
     const [isAlertVisible, setIsAlertVisible] = useState(false);
 
-        
     const onSubmit = async (data) => {
         try {
             const response = await axios.post('/api/auth/login', data);
@@ -19,9 +25,12 @@ export default function LoginPage() {
             sessionStorage.clear();
             sessionStorage.setItem('jwtToken', response.data.token);
             sessionStorage.setItem('uId', response.data._id);
-            setIsAlertVisible(true);
 
+            // Set the default header for all requests
+            axios.defaults.headers.common['Authorization'] = `Bearer ${response.data.token}`;
+            
             // Redirect to the /feed page
+            setIsAlertVisible(true);
             navigate("/feed");
         } catch (error) {
             console.error(error);
@@ -29,11 +38,19 @@ export default function LoginPage() {
             setIsAlertVisible(true);
         }
     };
+
     // Else, window does not refresh
     const onError = (errors, e) => console.log(errors, e);
 
+    useEffect(() => {
+        isAuthenticated();
+    }, []);
+
     return(
         <div className=' form-control flex-col gap-5 px-20 xl:px-40 w-full h-screen justify-center bg-neutral text-white font-poppins'>
+            <NavBar
+                
+            />
             <p className=' text-5xl font-bold text-center'>Login Page</p>
             <form onSubmit={handleSubmit(onSubmit, onError)}>
                 <div className=''>

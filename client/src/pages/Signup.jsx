@@ -1,7 +1,9 @@
 import { useForm } from "react-hook-form";
 import axios from 'axios';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom'
+
+import NavBar from '../components/NavBar';
 
 export default function SignupPage() {
     const navigate = useNavigate();
@@ -11,6 +13,13 @@ export default function SignupPage() {
 
     const [alertMessage, setAlertMessage] = useState('');
     const [isAlertVisible, setIsAlertVisible] = useState(false);
+
+    const auth = sessionStorage.getItem('jwtToken')
+
+    const isAuthenticated = async () => {
+        if (auth)
+            navigate('/feed')
+    }
         
     const onSubmit = async (data) => {
         try {
@@ -36,8 +45,13 @@ export default function SignupPage() {
     // Else, window does not refresh
     const onError = (errors, e) => console.log(errors, e);
 
+    useEffect(() => {
+        isAuthenticated();
+    }, []);
+
     return(
         <div className=' form-control flex-col gap-5 px-20 xl:px-40 w-full h-screen justify-center bg-neutral text-white font-poppins'>
+            <NavBar/>
             <p className=' text-5xl font-bold text-center'>Sign-up Page</p>
             <form onSubmit={handleSubmit(onSubmit, onError, (data) => {
                 // console.log(data)
