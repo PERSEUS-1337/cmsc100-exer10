@@ -61,12 +61,7 @@ export default function CommentsList({uId, comments}) {
             )}
             <div className="border-b-2 border-gray-400"/>
                 <div className='flex justify-between'>
-                    {/* <textarea 
-                        className="textarea textarea-ghost"
-                        placeholder="Write a comment"
-                        value={comment}
-                        onChange={(e) => setComment(e.target.value)}
-                    /> */}
+
                     <div className="form-control w-full max-w-xs">
                         <label className="label">
                             <span className="label-text">Write a comment</span>

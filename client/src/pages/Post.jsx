@@ -5,7 +5,7 @@ import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
 
 import { BiFace, BiEdit } from 'react-icons/bi';
 import { AiOutlineLike, AiOutlineArrowLeft } from 'react-icons/ai'
-import { MdOutlineDeleteOutline } from 'react-icons/md'
+import { MdOutlineDeleteOutline, MdOutlineCreate, MdOutlineSave } from 'react-icons/md'
 
 import NavBar from '../components/NavBar';
 import CommentsList from '../components/CommentsList';
@@ -98,32 +98,31 @@ export default function PostPage(){
     }, [pId]);
     
     return(
-        <div className='font-poppins bg-slate-400 sm:px-10 lg:px-40 py-2'>
+        <div className='font-poppins bg-slate-400 sm:px-10 lg:px-96 py-4 h-max'>
             <NavBar 
                 uId={uId}
             />
-            <div className='flex ' key={feed.pId}>
+            <div className='flex bg-white my-4 rounded-box p-4' key={feed.pId}>
                 {/* Interaction Column */}
-                <div className='flex-col'>
+                <div className='flex-col space-y-4 items-center px-4'>
                     <Link to='/feed'>
-                        <button className='btn btn-outline btn-neutral'>
-                            <AiOutlineArrowLeft className='text-4xl'/>
+                        <button className='btn btn-square btn-sm btn-neutral'>
+                            <AiOutlineArrowLeft className='text-2xl'/>
                         </button>
                     </Link>
                     {/* Remove Button */}
                     {feed.aId === uId && (
-                        <div className='flex border-4'>
-                            <button className='btn btn-outline btn-error' onClick={handleRemovePost}>
-
-                                <MdOutlineDeleteOutline className='text-4xl' />
+                        <div className='flex-col w-min h-min space-y-2 items-center justify-between'>
+                            <button className='btn btn-sm btn-square btn-outline btn-error' onClick={handleRemovePost}>
+                                <MdOutlineDeleteOutline className='text-2xl' />
                             </button>
-                            <button className='btn btn-outline btn-primary' onClick={() => {
+                            <button className='btn btn-sm btn-square btn-accent btn-outline' onClick={() => {
                                 if (isEditing) {
                                     handleSaveContent(feed.aId);
                                 }
                                 setIsEditing(!isEditing);
                                 }}>
-                                {isEditing ? 'Save' : 'Edit'}
+                                {isEditing ? <MdOutlineSave className='text-2xl'/> : <MdOutlineCreate className='text-2xl'/>}
                             </button>
                         </div>
                     )}
