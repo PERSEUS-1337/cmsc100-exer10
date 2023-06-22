@@ -1,10 +1,10 @@
-import { BsSearch, BsPersonAdd, BsPersonCircle } from 'react-icons/bs';
-import { GoGitMerge } from 'react-icons/go';
-
 import { useState } from 'react';
 import axios from 'axios';
-
 import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
+
+import { GoGitMerge } from 'react-icons/go';
+import { BsSearch, BsPersonAdd, BsPersonCircle } from 'react-icons/bs';
+import { BiSad } from 'react-icons/bi'
 
 export default function NavBar({uId}) {
     const [searchQuery, setSearchQuery] = useState('');
@@ -63,7 +63,7 @@ export default function NavBar({uId}) {
         <div className=" navbar bg-white rounded-box h-20 flex gap-4">
             {/* Logo */}
             <Link to='/'>
-                <div className='flex btn text-neutral btn-ghost normal-case'>
+                <div className='flex text-neutral normal-case'>
                     <GoGitMerge className='text-4xl'></GoGitMerge>
                     <h1 className=' text-4xl'>BookFace</h1>
                 </div>
@@ -84,12 +84,13 @@ export default function NavBar({uId}) {
                     <BsSearch className='text-4xl'/>
                 </label>
                 <ul tabIndex={0} className="menu flex dropdown-content z-[1] bg-inherit rounded-box mt-4">
-                    {searchResults.length > 0 && (
-                        <div className="flex-col bg-neutral rounded-lg w-max p-4 space-y-2">
-                            <div>
-                                <h1 className='text-xl text-secondary px-4'>Search Results</h1>
-                                <div className="border-b-2 border-gray-400 mx-4"/>
-                            </div>
+                    <div className="flex-col bg-neutral rounded-lg w-max p-4 space-y-2">
+                        <div>
+                            <h1 className='text-xl text-secondary px-4'>Search Results</h1>
+                            <div className="border-b-2 border-gray-400 mx-4"/>
+                        </div> 
+                    {searchResults.length > 0 ? (
+                        <div>
                             {searchResults.map((user) => (
                                 <li key={user._id}><a className='hover:bg-slate-500 flex justify-between'>
                                     {/* User Details */}
@@ -109,7 +110,13 @@ export default function NavBar({uId}) {
                                 </a></li>
                             ))}
                         </div>
+                    ):(
+                        <div className='flex text-2xl text-white items-center gap-x-4 bg-neutral rounded-lg w-max p-4 space-y-2'>
+                            <BiSad className='text-4xl text-accent'/>
+                            <h2>No users found...</h2>
+                        </div>
                     )}
+                    </div>
                 </ul>
             </div>
         </div>

@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { useState, useEffect } from 'react';
 
-import { BiFace } from 'react-icons/bi';
+import { BiFace, BiSad } from 'react-icons/bi';
 import { RxCross2, RxPlus, RxPaperPlane } from 'react-icons/rx'
 
 export default function FriendRequests({uId}) {
@@ -72,12 +72,19 @@ export default function FriendRequests({uId}) {
     }, []);
 
     return(
-        <div className=' flex-col bg-neutral rounded-box p-4 space-y-4 w-full'>
+        <div className=' flex-col bg-neutral rounded-box p-4 space-y-4 w-full border-2 hover:border-primary'>
+            {/* Title */}
             <div>
                 <h2 className='text-xl text-accent'>Friend Requests</h2>
                 <div className="border-b-2 border-gray-400"/>
             </div>
-            {requests.map((request) => (
+            {/* List */}
+            {requests.length === 0 ? (
+                <div className='flex text-2xl text-white items-center gap-x-4'>
+                    <BiSad className='text-4xl text-accent'/>
+                    <h2>No requests yet...</h2>
+                </div>
+            ) : (requests.map((request) => (
                 <div className='flex items-center gap-2 justify-between' key={request.fId}>
                     <div className='flex items-center gap-2'>
                         {/* Icon */}
@@ -107,7 +114,7 @@ export default function FriendRequests({uId}) {
                         </button>
                     </div>
                 </div>
-            ))}
+            )))}
         </div>
     );
 }
