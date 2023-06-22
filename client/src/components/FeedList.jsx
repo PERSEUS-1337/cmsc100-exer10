@@ -108,7 +108,7 @@ export default function FeedList({uId}) {
 
     return(
         <div className='space-y-4 flex-col'>
-            {feed.map((feed) => (
+            {feed.length > 0 ? (feed.map((feed) => (
                 <div className='flex bg-white rounded-box p-4 w-full' key={feed.pId}>
                     {/* Interaction Column */}
                     <div className='flex-col items-center h-min z-0'>
@@ -145,7 +145,9 @@ export default function FeedList({uId}) {
                             </div>
                         </div>
                 </div>
-            ))}
+            ))) : (
+                <div className="text-center text-slate-500">No posts yet</div>
+            )}
         </div>
     );
 }

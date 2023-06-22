@@ -14,10 +14,8 @@ export default function SignupPage() {
     const [alertMessage, setAlertMessage] = useState('');
     const [isAlertVisible, setIsAlertVisible] = useState(false);
 
-    const auth = sessionStorage.getItem('jwtToken')
-
     const isAuthenticated = async () => {
-        if (auth)
+        if (sessionStorage.getItem('jwtToken'))
             navigate('/feed')
     }
         
@@ -39,6 +37,7 @@ export default function SignupPage() {
             setIsAlertVisible(true);
         }
     };
+
     const handleRefresh = () => {
         window.location.reload();
     };
@@ -132,10 +131,10 @@ export default function SignupPage() {
                                         "password", 
                                         { 
                                             required: "This is required", 
-                                            // pattern: {
-                                            //     value: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/,
-                                            //     message:"*Must be at least 8 characters, 1 number, 1  lowercase letter, and 1 uppercase letter"
-                                            // },
+                                            pattern: {
+                                                value: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/,
+                                                message:"*Must be at least 8 characters, 1 number, 1  lowercase letter, and 1 uppercase letter"
+                                            },
                                             minLength: {
                                                 value: 8,
                                                 message: "Min length is 8"
@@ -143,11 +142,15 @@ export default function SignupPage() {
                                         }
                                     )}
                                     // onChange={() => trigger("password")}
-                                    
                                 />
                                 <label className="label">
                                     <span className="label-text-alt text-warning">{errors.password?.message}</span>
                                 </label>
+                                {isAlertVisible && (
+                                    <label className="label">
+                                        <span className="label-text text-info">{alertMessage}</span>
+                                    </label>
+                                )}
                             </div>
                             <div className="w-1/2">
                                 <label className="label">

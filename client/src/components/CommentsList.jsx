@@ -72,13 +72,15 @@ export default function CommentsList({uId, comments}) {
                 </label>
                 <div className="border-b-2 border-gray-400"/>
                 <div className='flex-col p-4 space-y-4'>
-                    {comments?.map((comment) => (
+                    {comments?.length > 0 ? (comments?.map((comment) => (
                         <div key={comment._id} className=''>
                             <h1 className='text-xl text-primary'>{comment.authorName}</h1>
                             <p className='text-md'>{comment.text}</p>
                             <p className='text-xs text-right text-slate-400 italic'>{comment.createdAt}</p>
                         </div>
-                    ))}
+                    ))): (
+                       <div className="text-center text-slate-500">No comments yet</div> 
+                    )}
                 </div>
             </div>
         </div>

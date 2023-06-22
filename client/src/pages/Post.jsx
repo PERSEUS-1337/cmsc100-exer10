@@ -35,10 +35,6 @@ export default function PostPage(){
         }
     };
 
-    const handleRefresh = () => {
-        window.location.reload();
-    };
-
     const handleSaveContent = async () => {
         // Save the modified content or cancel the edit mode
         try {
@@ -66,6 +62,13 @@ export default function PostPage(){
 
         }
     };
+
+    const isAuthenticated = async () => {
+        // Set the default header for all requests
+        axios.defaults.headers.common['Authorization'] = `Bearer ${sessionStorage.getItem('jwtToken')}`;
+        if (!sessionStorage.getItem('jwtToken'))
+            navigate('/')
+    }
 
     const fetchPost = async () => {
         try {
@@ -104,6 +107,7 @@ export default function PostPage(){
     
     useEffect(() => {
         fetchPost();
+        isAuthenticated();
     }, [pId]);
     
     return(
