@@ -1,10 +1,13 @@
 import axios from 'axios';
 import { BrowserRouter as Router, Link } from 'react-router-dom';
 import { useState, useEffect } from 'react';
+import { useNavigate } from "react-router-dom";
 
 import { AiOutlineLike } from 'react-icons/ai';
 
 export default function FeedList({uId}) {
+    const navigate = useNavigate();
+
     const [feed, setFeed] = useState([]);
     const [likedPosts, setLikedPosts] = useState([]);
 
@@ -122,8 +125,7 @@ export default function FeedList({uId}) {
                         </p>
                     </div>
                     {/* Post Details */}
-                        <div className='flex-col w-full hover:bg-slate-100 rounded-box px-4' >
-                        <Link to={{ pathname: `/feed/${feed.pId}`, state: { body: uId } }} key={feed.pId}>
+                        <div className='flex-col w-full hover:bg-slate-100 rounded-box px-4' onClick={() => navigate(`/feed/${feed.pId}`)}>
                             {/* Post Author */}
                             <div className='flex'>
                                 <div className='flex-col'>
@@ -141,7 +143,6 @@ export default function FeedList({uId}) {
                                     {feed.content}
                                 </p>
                             </div>
-                        </Link>
                         </div>
                 </div>
             ))}

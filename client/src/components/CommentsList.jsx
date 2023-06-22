@@ -56,7 +56,7 @@ export default function CommentsList({uId, comments}) {
                     <div className='flex gap-4'>
                         <input type="text" placeholder="Type here" value={comment} onChange={(e) => setComment(e.target.value)} className="input input-bordered w-full max-w-xs" />
                         <button onClick={handleCommentCreate}>
-                            <AiOutlineSend className='text-4xl text-primary' />
+                            <AiOutlineSend className='text-3xl text-primary' />
                         </button>
                     </div>
                 </div>

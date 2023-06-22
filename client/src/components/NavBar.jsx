@@ -1,12 +1,15 @@
 import { useState } from 'react';
 import axios from 'axios';
-import { BrowserRouter as Router, Link } from 'react-router-dom';
+
+import { useNavigate } from 'react-router-dom'
 
 import { GoGitMerge } from 'react-icons/go';
 import { BsSearch, BsPersonAdd } from 'react-icons/bs';
 import { BiSad } from 'react-icons/bi'
 
 export default function NavBar({uId}) {
+    const navigate = useNavigate();
+
     const [searchQuery, setSearchQuery] = useState('');
     const [searchResults, setSearchResults] = useState([]);
 
@@ -61,12 +64,10 @@ export default function NavBar({uId}) {
     return(
         <div className=" navbar bg-white rounded-box h-20 flex gap-4 p-4 drop-shadow-lg justify-between">
             {/* Logo */}
-            <Link to='/'>
-                <div className='flex text-neutral normal-case'>
-                    <GoGitMerge className='text-4xl'></GoGitMerge>
-                    <h1 className=' text-4xl'>BookFace</h1>
-                </div>
-            </Link>
+            <div className='flex text-neutral normal-case p-4 hover:bg-slate-100 rounded-box' onClick={() => navigate('/')}>
+                <GoGitMerge className='text-4xl'></GoGitMerge>
+                <h1 className=' text-4xl'>BookFace</h1>
+            </div>
             {/* Search Bar */}
             <div className="flex gap-4">
                 <input

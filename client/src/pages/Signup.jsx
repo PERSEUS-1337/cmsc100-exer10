@@ -1,9 +1,11 @@
 import { useForm } from "react-hook-form";
 import axios from 'axios';
-
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom'
 
 export default function SignupPage() {
+    const navigate = useNavigate();
+
     const { register, handleSubmit,watch, formState: {errors, isDirty }, trigger } = useForm();
     const password = watch("password");
 
@@ -18,12 +20,18 @@ export default function SignupPage() {
             setAlertMessage('Success! ' + response.data.msg);
             sessionStorage.clear();
             sessionStorage.setItem('jwtToken', response.data.token);
+            sessionStorage.setItem('uId', response.data.uId);
             setIsAlertVisible(true);
+            navigate("/feed")
+            handleRefresh();
         } catch (error) {
             console.error(error);
             setAlertMessage('Error: ' + error.response.data.err);
             setIsAlertVisible(true);
         }
+    };
+    const handleRefresh = () => {
+        window.location.reload();
     };
     // Else, window does not refresh
     const onError = (errors, e) => console.log(errors, e);

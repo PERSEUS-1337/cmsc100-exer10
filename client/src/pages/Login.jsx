@@ -1,11 +1,13 @@
 import { useForm } from "react-hook-form";
+import { useNavigate } from "react-router-dom";
+import React, { useState } from 'react';
 import axios from 'axios';
 
-import React, { useState } from 'react';
 
 export default function LoginPage() {
-    const { register, handleSubmit, formState: {errors, isDirty } } = useForm();
+    const navigate = useNavigate();
 
+    const { register, handleSubmit, formState: {errors, isDirty } } = useForm();
     const [alertMessage, setAlertMessage] = useState('');
     const [isAlertVisible, setIsAlertVisible] = useState(false);
 
@@ -18,6 +20,9 @@ export default function LoginPage() {
             sessionStorage.setItem('jwtToken', response.data.token);
             sessionStorage.setItem('uId', response.data._id);
             setIsAlertVisible(true);
+
+            // Redirect to the /feed page
+            navigate("/feed");
         } catch (error) {
             console.error(error);
             setAlertMessage('Error: ' + error.response.data.err);
