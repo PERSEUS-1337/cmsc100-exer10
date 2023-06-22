@@ -1,4 +1,4 @@
-import { BiFace } from 'react-icons/bi';
+import { BsPersonCircle } from 'react-icons/bs';
 
 import FriendsList from '../components/FriendsList';
 import FriendRequests from '../components/FriendRequests';
@@ -29,24 +29,18 @@ export default function SideBar({uId}) {
     }, []);
 
     return(
-        <div className=' w-1/3 h-full'>
+        <div className=' w-96 h-min bg-white rounded-box p-4 space-y-4'>
             {/* User Profile Details */}
-            <div className='flex '>
-                {/* Icon */}
-                <BiFace className='text-4xl'></BiFace>
+            <div className='flex-col items-center bg-slate-300 rounded-box p-4 w-full border-2 hover:border-primary'>
                 {/* Details */}
-                <div className=' flex-col '>
-                    <h2 className=' text-2xl text-black'>{user.name}</h2>
-                    <h3 className=' text-xl text-gray-500'>{user.email}</h3>
-                </div>
+                <h2 className=' text-2xl text-neutral font-bold'>{user.name}</h2>
+                <h3 className=' text-sm text-gray-500'>{user.email}</h3>
             </div>
             {/* Friends Requests */}
-            <h2 className='text-4xl'>Friend Requests</h2>
             <FriendRequests
                 uId={uId}
             />
             {/* Friends List */}
-            <h2 className='text-4xl'>Friends List</h2>
             <FriendsList
                 uId={uId}
             />

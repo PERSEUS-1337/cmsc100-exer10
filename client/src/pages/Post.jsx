@@ -5,7 +5,7 @@ import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
 
 import { BiFace, BiEdit } from 'react-icons/bi';
 import { AiOutlineLike, AiOutlineArrowLeft } from 'react-icons/ai'
-import { MdOutlineDeleteOutline } from 'react-icons/md'
+import { MdOutlineDeleteOutline, MdOutlineCreate, MdOutlineSave } from 'react-icons/md'
 
 import NavBar from '../components/NavBar';
 import CommentsList from '../components/CommentsList';
@@ -27,9 +27,14 @@ export default function PostPage(){
 
             // TODO: Show modal alert if success or not
             const response = await axios.delete('/api/post', {data: requestData});
+            handleRefresh();
         } catch (error) {
             console.error('Error toggling like:', error);
         }
+    };
+
+    const handleRefresh = () => {
+        window.location.reload();
     };
 
     const handleSaveContent = async () => {
@@ -78,6 +83,8 @@ export default function PostPage(){
             const date = new Date(responseData.createdAt);
             const formattedDate = date.toLocaleString();
 
+            responseData.comments.reverse();
+
             const postDetails = {
                 aId: responseData.author,
                 author: userData.fname + " " + userData.lname,
@@ -98,62 +105,64 @@ export default function PostPage(){
     }, [pId]);
     
     return(
-        <div>
-            <NavBar />
-            <div className='flex ' key={feed.pId}>
+        <div className='font-poppins bg-slate-400 sm:px-10 lg:px-96 py-4 h-max'>
+            <NavBar 
+                uId={uId}
+            />
+            <div className='flex bg-white my-4 rounded-box p-4 w-2/3' key={feed.pId}>
                 {/* Interaction Column */}
-                <div className='flex-col'>
-                    <Link to='/feed'>
-                        <button className='btn btn-outline btn-neutral'>
-                            <AiOutlineArrowLeft className='text-4xl'/>
-                        </button>
-                    </Link>
+                <div className='flex-col space-y-4 items-center px-4'>
+                    <button className='btn btn-square btn-sm btn-neutral'>
+                        <Link to='/feed'>
+                            <AiOutlineArrowLeft className='text-2xl'/>
+                        </Link>
+                    </button>
                     {/* Remove Button */}
                     {feed.aId === uId && (
-                        <div className='flex border-4'>
-                            <button className='btn btn-outline btn-error' onClick={handleRemovePost}>
+                        <div className='flex-col w-min h-min space-y-2 items-center justify-between'>
+                            <button className='btn btn-sm btn-square btn-outline btn-error' onClick={handleRemovePost}>
+                                <Link to='/feed'>
 
-                                <MdOutlineDeleteOutline className='text-4xl' />
+                                    <MdOutlineDeleteOutline className='text-2xl' />
+                                </Link>
                             </button>
-                            <button className='btn btn-outline btn-primary' onClick={() => {
+                            <button className='btn btn-sm btn-square btn-accent btn-outline' onClick={() => {
                                 if (isEditing) {
                                     handleSaveContent(feed.aId);
                                 }
                                 setIsEditing(!isEditing);
                                 }}>
-                                {isEditing ? 'Save' : 'Edit'}
+                                {isEditing ? <MdOutlineSave className='text-2xl'/> : <MdOutlineCreate className='text-2xl'/>}
                             </button>
                         </div>
                     )}
                 </div>
                 {/* Post Details */}
-                <div className='flex-col '>
+                <div className='flex-col space-y-4'>
                     {/* Post Author */}
                     <div className='flex '>
-                        <BiFace className='text-6xl text-neutral' />
                         <div className='flex-col'>
-                            <h1 className='text-4xl'>
+                            <h1 className='text-3xl text-neutral font-bold'>
                                 {feed.author}
                             </h1>
-                            <p>
+                            <p className='text-sm italic text-slate-400'>
                                 {feed.createdAt}
                             </p>
                         </div>
                     </div>
                     {/* Post Content */}
-                    <div>
                         {isEditing ? (
                             <textarea
-                            value={editedContent}
-                            onChange={(e) => setEditedContent(e.target.value)}
-                            className="textarea"
-                            placeholder={feed.content}
+                                value={editedContent}
+                                onChange={(e) => setEditedContent(e.target.value)}
+                                className="textarea textarea-accent w-full my-2"
+                                placeholder={feed.content}
                             />
                         ) : (
-                            <p className='text-3xl'>{feed.content}</p>
+                            <p className='text-xl'>{feed.content}</p>
                         )}
-                    </div>
                     {/* Comments */}
+                    <div className="border-b-2 border-gray-400"/>
                     <div>
                         <CommentsList
                             uId={uId}

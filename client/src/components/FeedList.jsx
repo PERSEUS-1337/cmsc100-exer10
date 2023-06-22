@@ -53,6 +53,7 @@ export default function FeedList({uId}) {
             // Get the feed of the user that contains user posts and friends' posts
             const response = await axios.get(`/api/post/user/${uId}/feed`)
             const responseData = await response.data.feed;
+            responseData.reverse()
 
             // Contains the final feed data to be pushed to the list 
             const finalPostList = []
@@ -106,48 +107,45 @@ export default function FeedList({uId}) {
     }, []);
 
     return(
-        <div className='space-y-4'>
+        <div className='space-y-4 flex-col'>
             {feed.map((feed) => (
-                <div className='flex ' key={feed.pId}>
+                <div className='flex bg-white rounded-box p-4 w-full' key={feed.pId}>
                     {/* Interaction Column */}
-                    <div className='flex-col'>
-                        <div>
-                            <label className='swap'>
-                                    <input type="checkbox"
-                                    checked={likedPosts.includes(feed.pId)}
-                                    onChange={() => handleToggleLike(feed.pId)}
-                                />
-                                <AiOutlineLike className='swap-on text-4xl text-accent'/>
-                                <AiOutlineLike className='swap-off text-4xl text-neutral'/>
-                            </label>
-                            <p>
-                                {feed.likes}
-                            </p>
-                        </div>
+                    <div className='flex-col items-center h-min z-0'>
+                        <label className='swap'>
+                            <input type="checkbox"
+                                checked={likedPosts.includes(feed.pId)}
+                                onChange={() => handleToggleLike(feed.pId)}
+                            />
+                            <AiOutlineLike className='swap-on text-4xl text-accent'/>
+                            <AiOutlineLike className='swap-off text-4xl text-neutral'/>
+                        </label>
+                        <p className='text-center'>
+                            {feed.likes}
+                        </p>
                     </div>
                     {/* Post Details */}
-                    <Link to={{ pathname: `/feed/${feed.pId}`, state: { body: uId } }} key={feed.pId}>
-                        <div className='flex-col'>
+                        <div className='flex-col w-full hover:bg-slate-100 rounded-box px-4' >
+                        <Link to={{ pathname: `/feed/${feed.pId}`, state: { body: uId } }} key={feed.pId}>
                             {/* Post Author */}
-                            <div className='flex '>
-                                <BiFace className='text-6xl text-neutral' />
+                            <div className='flex'>
                                 <div className='flex-col'>
-                                    <h1 className='text-4xl'>
+                                    <h1 className='text-2xl text-neutral font-bold'>
                                         {feed.author}
                                     </h1>
-                                    <p>
+                                    <p className='text-xs font-light italic text-slate-500'>
                                         {feed.createdAt}
                                     </p>
                                 </div>
                             </div>
                             {/* Post Content */}
                             <div>
-                                <p className=''>
+                                <p className='pt-4 tooltip tooltip-bottom text-left' data-tip="Click to comment / edit / delete post">
                                     {feed.content}
                                 </p>
                             </div>
+                        </Link>
                         </div>
-                    </Link>
                 </div>
             ))}
         </div>

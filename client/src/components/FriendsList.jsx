@@ -1,6 +1,8 @@
 import axios from 'axios';
-import { BiFace } from 'react-icons/bi';
 import { useState, useEffect } from 'react';
+
+import { BiFace, BiSad } from 'react-icons/bi';
+import { RxCross2, RxPlus, RxPaperPlane } from 'react-icons/rx'
 
 export default function FriendsList({uId}) {
     const [friends, setFriends] = useState([]);
@@ -53,22 +55,33 @@ export default function FriendsList({uId}) {
     }, []);
 
     return(
-         <div>
-        {friends.map((friend) => (
-            <div className='flex ' key={friend.fId}>
-            {/* Icon */}
-            <BiFace className='text-4xl' />
-            {/* Details */}
-            <div className='flex-col '>
-                <h2 className='text-2xl text-black'>{friend.fname} {friend.lname}</h2>
-                <h3 className='text-xl text-gray-500'>{friend.email}</h3>
+        <div className=' flex-col bg-neutral rounded-box p-4 space-y-4 w-full border-2 hover:border-primary'>
+             <div>
+                <h2 className='text-xl text-success'>Friends List</h2>
+                <div className="border-b-2 border-gray-400"/>
             </div>
-            {/* Button */}
-            <button className='btn btn-outline btn-error' onClick={() => removeFriend(friend.fId)}>
-                Remove
-            </button>
+        {friends.length === 0 ? (
+            <div className='flex text-2xl text-white items-center gap-x-4'>
+                <BiSad className='text-4xl text-accent'/>
+                <h2>No Friends yet</h2>
             </div>
-        ))}
+            ) : (friends.map((friend) => (
+            <div className='flex items-center gap-2 justify-between ' key={friend.fId}>
+                <div className='flex items-center gap-2'>
+                    {/* Icon */}
+                    {/* <BiFace className='text-4xl text-success' /> */}
+                    {/* Details */}
+                    <div className='flex-col '>
+                        <h2 className='text-xl text-secondary font-bold'>{friend.fname} {friend.lname}</h2>
+                        <h3 className='text-[11px] text-base-100'>{friend.email}</h3>
+                    </div>
+                </div>
+                {/* Button */}
+                <button className='btn btn-circle btn-outline btn-error btn-xs' onClick={() => removeFriend(friend.fId)}>
+                    <RxCross2 className='text-xl'/>
+                </button>
+            </div>
+        )))}
         </div>
     );
 }

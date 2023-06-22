@@ -1,10 +1,10 @@
-import { BsSearch, BsPersonAdd } from 'react-icons/bs';
-import { GoGitMerge } from 'react-icons/go';
-
 import { useState } from 'react';
 import axios from 'axios';
-
 import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
+
+import { GoGitMerge } from 'react-icons/go';
+import { BsSearch, BsPersonAdd, BsPersonCircle } from 'react-icons/bs';
+import { BiSad } from 'react-icons/bi'
 
 export default function NavBar({uId}) {
     const [searchQuery, setSearchQuery] = useState('');
@@ -15,13 +15,10 @@ export default function NavBar({uId}) {
             const response = await axios.get(`/api/user/${uId}/search?search=${searchQuery}`);
             const searchData = response.data.users;
             
-            const userResponse1 = await axios.get(`api/user/${uId}/friends`)
-            const userResponse2 = await axios.get(`api/user/${uId}/requests`)
+            const userResponse1 = await axios.get(`/api/user/${uId}/friends`)
+            const userResponse2 = await axios.get(`/api/user/${uId}/requests`)
             const userFriends = userResponse1.data.friends;
             const userFriendRequests = userResponse2.data.requests;
-
-            console.log(userFriends)
-            console.log(userFriendRequests)
 
             const reduceduserFriendRequests = userFriendRequests.map((obj) => obj._id);
 
@@ -63,10 +60,10 @@ export default function NavBar({uId}) {
     };
 
     return(
-        <div className=" navbar bg-base-300 rounded-box h-20 flex gap-4">
+        <div className=" navbar bg-white rounded-box h-20 flex gap-4 p-4 drop-shadow-lg justify-between">
             {/* Logo */}
             <Link to='/'>
-                <div className='flex '>
+                <div className='flex text-neutral normal-case'>
                     <GoGitMerge className='text-4xl'></GoGitMerge>
                     <h1 className=' text-4xl'>BookFace</h1>
                 </div>
@@ -75,37 +72,51 @@ export default function NavBar({uId}) {
             <div className="flex gap-4">
                 <input
                     type="text"
-                    placeholder="Search for a user on Bookface"
-                    className="input input-bordered w-full max-w-xs"
+                    placeholder="Search for a user"
+                    className="input input-primary "
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                 />
-            </div>
-            <div className="dropdown dropdown-end">
-                <label tabIndex={0} className="btn btn-primary rounded-btn" onClick={handleSearch}>
-                    Search
-                </label>
                 {/* Search Results Dropdown */}
-                <ul tabIndex={0} className="menu flex dropdown-content z-[1] bg-inherit rounded-box w-0 mt-4">
-                    {searchResults.length > 0 && (
-                        <div className="flex-col absolute bg-white shadow-lg mt-2 py-2 rounded-lg">
-                            {searchResults.map((user) => (
-                                <li key={user._id}><a>
-                                    <div key={user._id} className="px-4 py-2">
-                                        <p className='text-2xl text-black'>{user.fname} {user.lname}</p>
-                                        <p>{user.email}</p>
-                                    </div>
-                                    {/* Send Friend Request button */}
-                                    {!user.isAFriend && (
-                                        <button className='btn btn-primary btn-outline' onClick={() => sendFriendRequest(user._id)}>
-                                            <BsPersonAdd className='text-4xl'/>
-                                        </button>
-                                    )}
-                                </a></li>
-                            ))}
+                <div className="dropdown dropdown-bottom dropdown-end drop-shadow-2xl">
+                    <label tabIndex={0} className="btn btn-outline btn-primary btn-circle" onClick={handleSearch}>
+                        <BsSearch className='text-3xl'/>
+                    </label>
+                    <ul tabIndex={0} className="menu flex dropdown-content z-[1] bg-inherit rounded-box mt-4">
+                        <div className="flex-col bg-neutral rounded-lg w-max p-4 space-y-2">
+                            <div>
+                                <h1 className='text-xl text-secondary px-4'>Search Results</h1>
+                                <div className="border-b-2 border-gray-400 mx-4"/>
+                            </div> 
+                        {searchResults.length > 0 ? (
+                            <div>
+                                {searchResults.map((user) => (
+                                    <li key={user._id}><a className='hover:bg-slate-500 flex justify-between'>
+                                        {/* User Details */}
+                                        <div key={user._id} className="">
+                                            <p className='text-2xl font-bold text-secondary'>{user.fname} {user.lname}</p>
+                                            <p className='text-base-100'>{user.email}</p>
+                                        </div>
+                                        {/* Send Friend Request button */}
+                                        <div>
+                                            {!user.isAFriend && (
+                                                <button className='btn btn-md btn-accent btn-outline' onClick={() => sendFriendRequest(user._id)}>
+                                                    <BsPersonAdd className='text-4xl'/>
+                                                </button>
+                                            )}
+                                        </div>
+                                    </a></li>
+                                ))}
+                            </div>
+                        ):(
+                            <div className='flex text-2xl text-white items-center gap-x-4 bg-neutral rounded-lg w-max p-4 space-y-2'>
+                                <BiSad className='text-4xl text-accent'/>
+                                <h2>No users found...</h2>
+                            </div>
+                        )}
                         </div>
-                    )}
-                </ul>
+                    </ul>
+                </div>
             </div>
         </div>
     );
