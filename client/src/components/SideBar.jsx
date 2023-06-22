@@ -29,27 +29,22 @@ export default function SideBar({uId}) {
     }, []);
 
     return(
-        <div className=' w-min h-min bg-white rounded-box p-4'>
+        <div className=' w-2/3 h-min bg-white rounded-box p-2 space-y-2'>
             {/* User Profile Details */}
-            <div className='flex items-center bg-base-100 rounded-box p-4 gap-2 w-max'>
+            <div className='flex items-center bg-base-100 rounded-box p-4 gap-2 w-full'>
                 {/* Icon */}
-                <BsPersonCircle className='text-4xl text-neutral'/>
+                {/* <BsPersonCircle className='text-4xl text-neutral'/> */}
                 {/* Details */}
                 <div className=' flex-col '>
-                    <h2 className=' text-2xl text-black'>{user.name}</h2>
+                    <h2 className=' text-2xl text-neutral font-bold'>{user.name}</h2>
                     <h3 className=' text-sm text-gray-500'>{user.email}</h3>
                 </div>
             </div>
             {/* Friends Requests */}
-            <div className=' flex-col bg-base-100 rounded-box p-4'>
-
-                <h2 className='text-2xl'>Friend Requests</h2>
-                <FriendRequests
-                    uId={uId}
-                />
-            </div>
+            <FriendRequests
+                uId={uId}
+            />
             {/* Friends List */}
-            <h2 className='text-4xl'>Friends List</h2>
             <FriendsList
                 uId={uId}
             />

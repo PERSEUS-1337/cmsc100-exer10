@@ -1,6 +1,8 @@
 import axios from 'axios';
-import { BiFace } from 'react-icons/bi';
 import { useState, useEffect } from 'react';
+
+import { BiFace } from 'react-icons/bi';
+import { RxCross2, RxPlus, RxPaperPlane } from 'react-icons/rx'
 
 export default function FriendRequests({uId}) {
     const [requests, setRequests] = useState([]);
@@ -70,36 +72,42 @@ export default function FriendRequests({uId}) {
     }, []);
 
     return(
-        <div>
-        {requests.map((request) => (
-            <div className='flex ' key={request.fId}>
-            {/* Icon */}
-            <BiFace className='text-4xl' />
-            {/* Details */}
-            <div className='flex-col '>
-                <h2 className='text-2xl text-black'>{request.fname} {request.lname}</h2>
-                <h3 className='text-xl text-gray-500'>{request.email}</h3>
+        <div className=' flex-col bg-neutral rounded-box p-4 space-y-4 w-full'>
+            <div>
+                <h2 className='text-xl text-accent'>Friend Requests</h2>
+                <div className="border-b-2 border-gray-400"/>
             </div>
-            {request.status === 'received' ? (
-                <div>
-                    <button className='btn btn-outline btn-success' onClick={() => acceptFriend(request.fId)}>
-                        Accept
-                    </button>
-                    <button className='btn btn-outline btn-error' onClick={() => rejectFriend(request.fId)}>
-                        Remove
-                    </button>
+            {requests.map((request) => (
+                <div className='flex items-center gap-2 justify-between' key={request.fId}>
+                    <div className='flex items-center gap-2'>
+                        {/* Icon */}
+                        {/* <BiFace className='text-4xl text-accent'/> */}
+                        {/* Details */}
+                        <div className='flex-col '>
+                            <h2 className='text-xl text-secondary font-bold'>{request.fname} {request.lname}</h2>
+                            <h3 className='text-[11px] text-base-100'>{request.email}</h3>
+                        </div>
+                    </div>
+                    {/* Interaction Buttons */}
+                    <div className='flex border-white space-x-2'>
+                        <div>
+                            {request.status === 'received' ? (
+                                <button className='btn btn-circle btn-xs btn-outline btn-success' onClick={() => acceptFriend(request.fId)}>
+                                    <RxPlus className='text-xl'/>
+                                </button>
+                            ) : (
+                                <div></div>
+                                // <button className='btn btn-disabled btn-circle btn-xs btn-outline btn-primary' onClick={() => acceptFriend(request.fId)}>
+                                //     <RxPlus className='text-xl'/>
+                                // </button>
+                            )}
+                        </div>
+                        <button className='btn btn-circle btn-outline btn-error btn-xs' onClick={() => rejectFriend(request.fId)}>
+                            <RxCross2 className='text-xl'/>
+                        </button>
+                    </div>
                 </div>
-            ) : (
-                <div>
-                    <p>Request Sent!</p>
-                    <button className='btn btn-outline btn-error' onClick={() => rejectFriend(request.fId)}>
-                        Cancel Request
-                    </button>
-                </div>
-            )}
-            
-            </div>
-        ))}
+            ))}
         </div>
     );
 }

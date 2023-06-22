@@ -15,8 +15,8 @@ export default function NavBar({uId}) {
             const response = await axios.get(`/api/user/${uId}/search?search=${searchQuery}`);
             const searchData = response.data.users;
             
-            const userResponse1 = await axios.get(`api/user/${uId}/friends`)
-            const userResponse2 = await axios.get(`api/user/${uId}/requests`)
+            const userResponse1 = await axios.get(`/api/user/${uId}/friends`)
+            const userResponse2 = await axios.get(`/api/user/${uId}/requests`)
             const userFriends = userResponse1.data.friends;
             const userFriendRequests = userResponse2.data.requests;
 
@@ -85,23 +85,27 @@ export default function NavBar({uId}) {
                 </label>
                 <ul tabIndex={0} className="menu flex dropdown-content z-[1] bg-inherit rounded-box mt-4">
                     {searchResults.length > 0 && (
-                        <div className="flex-col bg-neutral rounded-lg w-max p-4">
-                            <h1 className='text-xl text-secondary px-4'>Search Results</h1>
-                            <div className="border-b-2 border-gray-400 mx-4"/>
+                        <div className="flex-col bg-neutral rounded-lg w-max p-4 space-y-2">
+                            <div>
+                                <h1 className='text-xl text-secondary px-4'>Search Results</h1>
+                                <div className="border-b-2 border-gray-400 mx-4"/>
+                            </div>
                             {searchResults.map((user) => (
-                                <li key={user._id}><a>
+                                <li key={user._id}><a className='hover:bg-slate-500 flex justify-between'>
                                     {/* User Details */}
-                                    <BsPersonCircle className='text-4xl text-accent'/>
-                                    <div key={user._id} className="px-4 py-2">
+                                    {/* <BsPersonCircle className='text-4xl text-secondary'/> */}
+                                    <div key={user._id} className="">
                                         <p className='text-2xl font-bold text-secondary'>{user.fname} {user.lname}</p>
                                         <p className='text-base-100'>{user.email}</p>
                                     </div>
                                     {/* Send Friend Request button */}
-                                    {!user.isAFriend && (
-                                        <button className='btn btn-accent btn-outline' onClick={() => sendFriendRequest(user._id)}>
-                                            <BsPersonAdd className='text-4xl'/>
-                                        </button>
-                                    )}
+                                    <div>
+                                        {!user.isAFriend && (
+                                            <button className='btn btn-md btn-accent btn-outline' onClick={() => sendFriendRequest(user._id)}>
+                                                <BsPersonAdd className='text-4xl'/>
+                                            </button>
+                                        )}
+                                    </div>
                                 </a></li>
                             ))}
                         </div>
